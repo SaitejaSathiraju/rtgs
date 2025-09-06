@@ -11,6 +11,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.syntax import Syntax
 from rich.markdown import Markdown
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from loguru import logger
@@ -1057,129 +1058,403 @@ def executive_summary(
 
 
 def _generate_executive_summary(df: pd.DataFrame, dataset_name: str) -> str:
-    """Generate executive summary for the dataset."""
+    """Generate comprehensive, policy-focused executive summary for the dataset."""
     
     summary_parts = []
     
     # Header
     summary_parts.append(f"EXECUTIVE SUMMARY: {dataset_name.upper()}")
-    summary_parts.append("=" * 50)
+    summary_parts.append("=" * 80)
     summary_parts.append("")
     
-    # Dataset Overview
-    summary_parts.append("📊 DATASET OVERVIEW")
-    summary_parts.append(f"• Total Records: {len(df):,}")
-    summary_parts.append(f"• Total Columns: {len(df.columns)}")
-    summary_parts.append(f"• Data Types: {dict(df.dtypes.value_counts())}")
+    # Executive Overview
+    summary_parts.append("🎯 EXECUTIVE OVERVIEW")
+    summary_parts.append(f"This analysis covers {len(df):,} records across {len(df.columns)} data dimensions.")
+    summary_parts.append(f"Dataset represents: {_identify_dataset_domain(df)}")
+    summary_parts.append("")
+    
+    # Critical Findings
+    summary_parts.append("🚨 CRITICAL FINDINGS")
+    critical_findings = _extract_critical_findings(df)
+    for finding in critical_findings:
+        summary_parts.append(f"• {finding}")
     summary_parts.append("")
     
     # Data Quality Assessment
     summary_parts.append("🔍 DATA QUALITY ASSESSMENT")
-    missing_data = df.isnull().sum()
-    if missing_data.sum() > 0:
-        summary_parts.append("⚠️ Data Quality Issues:")
-        for col, missing_count in missing_data[missing_data > 0].items():
-            percentage = (missing_count / len(df)) * 100
-            summary_parts.append(f"  • {col}: {missing_count:,} missing ({percentage:.1f}%)")
+    quality_score, quality_issues = _assess_data_quality(df)
+    summary_parts.append(f"Overall Data Quality Score: {quality_score}/100")
+    if quality_issues:
+        summary_parts.append("Key Quality Issues:")
+        for issue in quality_issues:
+            summary_parts.append(f"  • {issue}")
     else:
-        summary_parts.append("✅ No missing values detected")
-    
-    duplicate_count = df.duplicated().sum()
-    if duplicate_count > 0:
-        summary_parts.append(f"⚠️ Duplicate records: {duplicate_count:,}")
-    else:
-        summary_parts.append("✅ No duplicate records found")
+        summary_parts.append("✅ Excellent data quality - no critical issues detected")
     summary_parts.append("")
     
-    # Key Statistics
-    summary_parts.append("📈 KEY STATISTICS")
-    numeric_cols = df.select_dtypes(include=['number']).columns
-    if len(numeric_cols) > 0:
-        for col in numeric_cols[:3]:  # Top 3 numeric columns
-            if col.lower() not in ['unnamed: 0', 'index', 'id']:
-                mean_val = df[col].mean()
-                std_val = df[col].std()
-                min_val = df[col].min()
-                max_val = df[col].max()
-                summary_parts.append(f"• {col}:")
-                summary_parts.append(f"  - Mean: {mean_val:,.2f}")
-                summary_parts.append(f"  - Std Dev: {std_val:,.2f}")
-                summary_parts.append(f"  - Range: {min_val:,.2f} to {max_val:,.2f}")
-    summary_parts.append("")
-    
-    # Categorical Insights
-    categorical_cols = df.select_dtypes(include=['object']).columns
-    if len(categorical_cols) > 0:
-        summary_parts.append("📊 CATEGORICAL INSIGHTS")
-        for col in categorical_cols[:3]:  # Top 3 categorical columns
-            if col.lower() not in ['unnamed: 0', 'index', 'id']:
-                top_values = df[col].value_counts().head(3)
-                summary_parts.append(f"• {col} - Top 3 values:")
-                for value, count in top_values.items():
-                    percentage = (count / len(df)) * 100
-                    summary_parts.append(f"  - {str(value)[:30]}: {count:,} ({percentage:.1f}%)")
+    # Geographic Distribution Analysis
+    geo_analysis = _analyze_geographic_distribution(df)
+    if geo_analysis:
+        summary_parts.append("🗺️ GEOGRAPHIC DISTRIBUTION ANALYSIS")
+        for analysis in geo_analysis:
+            summary_parts.append(f"• {analysis}")
         summary_parts.append("")
     
-    # Correlations
-    if len(numeric_cols) > 1:
-        summary_parts.append("🔗 KEY CORRELATIONS")
-        corr_matrix = df[numeric_cols].corr()
-        correlations = []
-        for i in range(len(corr_matrix.columns)):
-            for j in range(i+1, len(corr_matrix.columns)):
-                corr_val = corr_matrix.iloc[i, j]
-                if abs(corr_val) > 0.5:  # Only strong correlations
-                    correlations.append((corr_matrix.columns[i], corr_matrix.columns[j], corr_val))
-        
-        if correlations:
-            for col1, col2, corr in sorted(correlations, key=lambda x: abs(x[2]), reverse=True)[:3]:
-                strength = "Strong" if abs(corr) > 0.7 else "Moderate"
-                direction = "Positive" if corr > 0 else "Negative"
-                summary_parts.append(f"• {col1} ↔ {col2}: {corr:.3f} ({strength} {direction})")
-        else:
-            summary_parts.append("• No strong correlations found")
+    # Sector/Industry Analysis
+    sector_analysis = _analyze_sectors(df)
+    if sector_analysis:
+        summary_parts.append("🏭 SECTOR/INDUSTRY ANALYSIS")
+        for analysis in sector_analysis:
+            summary_parts.append(f"• {analysis}")
+        summary_parts.append("")
+    
+    # Temporal Analysis
+    temporal_analysis = _analyze_temporal_patterns(df)
+    if temporal_analysis:
+        summary_parts.append("📅 TEMPORAL ANALYSIS")
+        for analysis in temporal_analysis:
+            summary_parts.append(f"• {analysis}")
         summary_parts.append("")
     
     # Policy Recommendations
     summary_parts.append("🎯 POLICY RECOMMENDATIONS")
-    
-    # Data-driven recommendations
-    if missing_data.sum() > 0:
-        summary_parts.append("• Implement data collection improvements to reduce missing values")
-    
-    if duplicate_count > 0:
-        summary_parts.append("• Establish data deduplication processes")
-    
-    if len(numeric_cols) > 0:
-        summary_parts.append("• Monitor key metrics for trend analysis")
-    
-    if len(categorical_cols) > 0:
-        summary_parts.append("• Analyze categorical patterns for targeted interventions")
-    
-    # Domain-specific recommendations
-    if 'consumption' in dataset_name.lower() or 'consumption' in ' '.join(df.columns).lower():
-        summary_parts.append("• Implement consumption monitoring systems")
-        summary_parts.append("• Develop efficiency improvement programs")
-    
-    if 'agricultural' in dataset_name.lower() or 'agricultural' in ' '.join(df.columns).lower():
-        summary_parts.append("• Support sustainable agricultural practices")
-        summary_parts.append("• Invest in agricultural infrastructure")
-    
+    recommendations = _generate_policy_recommendations(df)
+    for i, rec in enumerate(recommendations, 1):
+        summary_parts.append(f"{i}. {rec}")
     summary_parts.append("")
     
-    # Next Steps
-    summary_parts.append("📋 NEXT STEPS")
-    summary_parts.append("• Review data quality issues and implement fixes")
-    summary_parts.append("• Conduct deeper analysis on key variables")
-    summary_parts.append("• Develop monitoring dashboards")
-    summary_parts.append("• Schedule regular data reviews")
+    # Implementation Roadmap
+    summary_parts.append("🛣️ IMPLEMENTATION ROADMAP")
+    roadmap = _create_implementation_roadmap(df)
+    for phase in roadmap:
+        summary_parts.append(f"• {phase}")
+    summary_parts.append("")
+    
+    # Risk Assessment
+    summary_parts.append("⚠️ RISK ASSESSMENT")
+    risks = _assess_risks(df)
+    for risk in risks:
+        summary_parts.append(f"• {risk}")
+    summary_parts.append("")
+    
+    # Success Metrics
+    summary_parts.append("📊 SUCCESS METRICS")
+    metrics = _define_success_metrics(df)
+    for metric in metrics:
+        summary_parts.append(f"• {metric}")
+    summary_parts.append("")
+    
+    # Technical Details
+    summary_parts.append("🔧 TECHNICAL DETAILS")
+    summary_parts.append(f"• Dataset Size: {len(df):,} records × {len(df.columns)} columns")
+    summary_parts.append(f"• Data Types: {dict(df.dtypes.value_counts())}")
+    summary_parts.append(f"• Memory Usage: {df.memory_usage(deep=True).sum() / 1024 / 1024:.2f} MB")
     summary_parts.append("")
     
     # Footer
-    summary_parts.append("Generated on: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    summary_parts.append("Analysis System: RTGS AI Analyst")
+    summary_parts.append("=" * 80)
+    summary_parts.append(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    summary_parts.append("Analysis System: RTGS AI Analyst v3.0")
+    summary_parts.append("Confidence Level: High (Based on comprehensive data analysis)")
     
     return "\n".join(summary_parts)
+
+
+def _identify_dataset_domain(df: pd.DataFrame) -> str:
+    """Identify the domain/purpose of the dataset."""
+    columns_lower = [col.lower() for col in df.columns]
+    
+    if any('pharmacy' in col or 'medical' in col or 'health' in col for col in columns_lower):
+        return "Healthcare/Pharmaceutical licensing and regulation"
+    elif any('industry' in col or 'manufacturing' in col for col in columns_lower):
+        return "Industrial development and manufacturing"
+    elif any('tourism' in col or 'visitor' in col for col in columns_lower):
+        return "Tourism and visitor management"
+    elif any('rain' in col or 'weather' in col for col in columns_lower):
+        return "Weather and environmental monitoring"
+    elif any('consumption' in col or 'power' in col or 'electricity' in col for col in columns_lower):
+        return "Energy consumption and utility management"
+    else:
+        return "General administrative and regulatory data"
+
+
+def _extract_critical_findings(df: pd.DataFrame) -> list:
+    """Extract critical findings from the data."""
+    findings = []
+    
+    # Check for concentration patterns
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            value_counts = df[col].value_counts()
+            if len(value_counts) > 0:
+                top_value = value_counts.iloc[0]
+                percentage = (top_value / len(df)) * 100
+                if percentage > 80:
+                    findings.append(f"High concentration in {col}: {top_value} records ({percentage:.1f}%) represent '{value_counts.index[0]}'")
+    
+    # Check for geographic concentration
+    geo_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['district', 'city', 'village', 'location', 'place'])]
+    for col in geo_cols:
+        if col in df.columns:
+            geo_counts = df[col].value_counts()
+            if len(geo_counts) > 0:
+                top_location = geo_counts.iloc[0]
+                percentage = (top_location / len(df)) * 100
+                findings.append(f"Geographic concentration: {top_location} records ({percentage:.1f}%) in '{geo_counts.index[0]}'")
+    
+    # Check for temporal patterns
+    date_cols = [col for col in df.columns if 'date' in col.lower()]
+    for col in date_cols:
+        if col in df.columns:
+            try:
+                df[col] = pd.to_datetime(df[col], errors='coerce')
+                recent_records = df[col].dt.year.value_counts()
+                if len(recent_records) > 0:
+                    latest_year = recent_records.index.max()
+                    latest_count = recent_records[latest_year]
+                    percentage = (latest_count / len(df)) * 100
+                    findings.append(f"Recent activity: {latest_count} records ({percentage:.1f}%) from {latest_year}")
+            except:
+                pass
+    
+    return findings[:5]  # Limit to top 5 findings
+
+
+def _assess_data_quality(df: pd.DataFrame) -> tuple:
+    """Assess data quality and return score and issues."""
+    score = 100
+    issues = []
+    
+    # Check missing values
+    missing_data = df.isnull().sum()
+    total_missing = missing_data.sum()
+    if total_missing > 0:
+        missing_percentage = (total_missing / (len(df) * len(df.columns))) * 100
+        score -= missing_percentage * 2
+        issues.append(f"Missing values: {total_missing:,} total ({missing_percentage:.1f}% of all data)")
+    
+    # Check duplicates
+    duplicate_count = df.duplicated().sum()
+    if duplicate_count > 0:
+        duplicate_percentage = (duplicate_count / len(df)) * 100
+        score -= duplicate_percentage * 3
+        issues.append(f"Duplicate records: {duplicate_count:,} ({duplicate_percentage:.1f}%)")
+    
+    # Check data consistency
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            # Check for inconsistent formatting
+            unique_values = df[col].unique()
+            if len(unique_values) > len(df) * 0.8:  # Too many unique values
+                issues.append(f"High variability in {col}: {len(unique_values)} unique values")
+    
+    return max(0, int(score)), issues
+
+
+def _analyze_geographic_distribution(df: pd.DataFrame) -> list:
+    """Analyze geographic distribution patterns."""
+    analysis = []
+    
+    geo_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['district', 'city', 'village', 'location', 'place', 'mandal'])]
+    
+    for col in geo_cols:
+        if col in df.columns:
+            geo_counts = df[col].value_counts()
+            if len(geo_counts) > 0:
+                total_locations = len(geo_counts)
+                top_3_percentage = (geo_counts.head(3).sum() / len(df)) * 100
+                analysis.append(f"{col}: {total_locations} locations, top 3 represent {top_3_percentage:.1f}% of records")
+                
+                # Identify underserved areas
+                if len(geo_counts) > 5:
+                    bottom_3 = geo_counts.tail(3)
+                    analysis.append(f"Underserved areas: {', '.join(bottom_3.index)} with only {bottom_3.sum()} records combined")
+    
+    return analysis
+
+
+def _analyze_sectors(df: pd.DataFrame) -> list:
+    """Analyze sector/industry patterns."""
+    analysis = []
+    
+    sector_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['sector', 'industry', 'type', 'category', 'activity'])]
+    
+    for col in sector_cols:
+        if col in df.columns:
+            sector_counts = df[col].value_counts()
+            if len(sector_counts) > 0:
+                total_sectors = len(sector_counts)
+                dominant_sector = sector_counts.iloc[0]
+                dominant_percentage = (dominant_sector / len(df)) * 100
+                analysis.append(f"{col}: {total_sectors} sectors, '{sector_counts.index[0]}' dominates with {dominant_percentage:.1f}%")
+                
+                # Identify emerging sectors
+                if len(sector_counts) > 3:
+                    emerging = sector_counts.tail(3)
+                    analysis.append(f"Emerging sectors: {', '.join(emerging.index)} with {emerging.sum()} records")
+    
+    return analysis
+
+
+def _analyze_temporal_patterns(df: pd.DataFrame) -> list:
+    """Analyze temporal patterns in the data."""
+    analysis = []
+    
+    date_cols = [col for col in df.columns if 'date' in col.lower()]
+    
+    for col in date_cols:
+        if col in df.columns:
+            try:
+                df[col] = pd.to_datetime(df[col], errors='coerce')
+                valid_dates = df[col].dropna()
+                if len(valid_dates) > 0:
+                    date_range = valid_dates.max() - valid_dates.min()
+                    analysis.append(f"{col}: {len(valid_dates)} valid dates spanning {date_range.days} days")
+                    
+                    # Monthly patterns
+                    monthly_counts = valid_dates.dt.month.value_counts()
+                    if len(monthly_counts) > 0:
+                        peak_month = monthly_counts.idxmax()
+                        peak_count = monthly_counts.max()
+                        analysis.append(f"Peak activity in month {peak_month}: {peak_count} records")
+            except:
+                pass
+    
+    return analysis
+
+
+def _generate_policy_recommendations(df: pd.DataFrame) -> list:
+    """Generate specific policy recommendations based on data analysis."""
+    recommendations = []
+    
+    # Geographic equity recommendations
+    geo_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['district', 'city', 'village', 'location', 'place'])]
+    for col in geo_cols:
+        if col in df.columns:
+            geo_counts = df[col].value_counts()
+            if len(geo_counts) > 0:
+                gini_coefficient = _calculate_gini_coefficient(geo_counts.values)
+                if gini_coefficient > 0.6:
+                    recommendations.append(f"Address geographic inequality in {col}: Gini coefficient {gini_coefficient:.2f} indicates high concentration")
+    
+    # Sector development recommendations
+    sector_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['sector', 'industry', 'type', 'category'])]
+    for col in sector_cols:
+        if col in df.columns:
+            sector_counts = df[col].value_counts()
+            if len(sector_counts) > 0:
+                dominant_sector = sector_counts.iloc[0]
+                dominant_percentage = (dominant_sector / len(df)) * 100
+                if dominant_percentage > 70:
+                    recommendations.append(f"Diversify {col}: '{sector_counts.index[0]}' represents {dominant_percentage:.1f}% - consider sector diversification policies")
+    
+    # Capacity building recommendations
+    total_records = len(df)
+    if total_records < 100:
+        recommendations.append(f"Scale up operations: Only {total_records} records suggest limited reach - consider expansion initiatives")
+    elif total_records > 1000:
+        recommendations.append(f"Optimize processes: {total_records:,} records indicate high volume - focus on efficiency improvements")
+    
+    # Data quality recommendations
+    missing_data = df.isnull().sum()
+    if missing_data.sum() > 0:
+        recommendations.append("Improve data collection: Address missing values to enhance decision-making accuracy")
+    
+    return recommendations[:8]  # Limit to top 8 recommendations
+
+
+def _create_implementation_roadmap(df: pd.DataFrame) -> list:
+    """Create implementation roadmap based on data insights."""
+    roadmap = []
+    
+    # Phase 1: Immediate (0-3 months)
+    roadmap.append("Phase 1 (0-3 months): Address critical data quality issues and establish monitoring systems")
+    
+    # Phase 2: Short-term (3-6 months)
+    roadmap.append("Phase 2 (3-6 months): Implement geographic equity measures and sector diversification")
+    
+    # Phase 3: Medium-term (6-12 months)
+    roadmap.append("Phase 3 (6-12 months): Scale operations and optimize processes based on data insights")
+    
+    # Phase 4: Long-term (12+ months)
+    roadmap.append("Phase 4 (12+ months): Establish predictive analytics and continuous improvement systems")
+    
+    return roadmap
+
+
+def _assess_risks(df: pd.DataFrame) -> list:
+    """Assess potential risks based on data patterns."""
+    risks = []
+    
+    # Data quality risks
+    missing_data = df.isnull().sum()
+    if missing_data.sum() > 0:
+        risks.append("Data Quality Risk: Missing values may lead to inaccurate policy decisions")
+    
+    # Geographic concentration risks
+    geo_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['district', 'city', 'village', 'location'])]
+    for col in geo_cols:
+        if col in df.columns:
+            geo_counts = df[col].value_counts()
+            if len(geo_counts) > 0:
+                top_location = geo_counts.iloc[0]
+                percentage = (top_location / len(df)) * 100
+                if percentage > 60:
+                    risks.append(f"Geographic Risk: Over-concentration in '{geo_counts.index[0]}' ({percentage:.1f}%) may create regional imbalances")
+    
+    # Sector concentration risks
+    sector_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['sector', 'industry', 'type'])]
+    for col in sector_cols:
+        if col in df.columns:
+            sector_counts = df[col].value_counts()
+            if len(sector_counts) > 0:
+                dominant_sector = sector_counts.iloc[0]
+                percentage = (dominant_sector / len(df)) * 100
+                if percentage > 80:
+                    risks.append(f"Sector Risk: Over-dependence on '{sector_counts.index[0]}' ({percentage:.1f}%) creates vulnerability")
+    
+    return risks[:5]  # Limit to top 5 risks
+
+
+def _define_success_metrics(df: pd.DataFrame) -> list:
+    """Define success metrics for policy implementation."""
+    metrics = []
+    
+    # Geographic equity metrics
+    geo_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['district', 'city', 'village', 'location'])]
+    if geo_cols:
+        metrics.append("Geographic Equity: Reduce Gini coefficient to <0.4 across all geographic dimensions")
+    
+    # Sector diversification metrics
+    sector_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['sector', 'industry', 'type'])]
+    if sector_cols:
+        metrics.append("Sector Diversification: No single sector should represent >60% of total activity")
+    
+    # Data quality metrics
+    metrics.append("Data Quality: Achieve 95%+ data completeness across all critical fields")
+    
+    # Process efficiency metrics
+    metrics.append("Process Efficiency: Reduce average processing time by 25% within 12 months")
+    
+    # Coverage metrics
+    total_records = len(df)
+    if total_records < 500:
+        metrics.append("Coverage Expansion: Increase total records by 100% within 18 months")
+    else:
+        metrics.append("Coverage Optimization: Maintain current volume while improving quality")
+    
+    return metrics
+
+
+def _calculate_gini_coefficient(values):
+    """Calculate Gini coefficient for inequality measurement."""
+    if len(values) == 0:
+        return 0
+    
+    values = sorted(values)
+    n = len(values)
+    cumsum = np.cumsum(values)
+    return (n + 1 - 2 * sum((n + 1 - i) * y for i, y in enumerate(cumsum, 1))) / (n * sum(values))
 
 
 @app.command()

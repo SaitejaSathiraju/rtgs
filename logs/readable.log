@@ -77,3 +77,5 @@
 2025-09-06 16:02:01,507 - TelanganaAnalyst - INFO - 📋 [bold blue]EXECUTIVE SUMMARIES[/bold blue]: Generating executive summaries for all datasets
 2025-09-06 16:02:01 - STAGE: EXECUTIVE SUMMARIES - Generating executive summaries for all datasets
 2025-09-06 16:02:01 - SESSION_SUMMARY: {'duration': 'Complete', 'datasets': 1, 'questions': 'Unlimited', 'charts': 'Generated for all', 'errors': 0}
+2025-09-06 16:55:30,655 - TelanganaAnalyst - INFO - 📋 [bold blue]Executive Summary[/bold blue]: Dataset: data/ndps_2025_08_0.csv
+2025-09-06 16:55:30 - STAGE: Executive Summary - Dataset: data/ndps_2025_08_0.csv
