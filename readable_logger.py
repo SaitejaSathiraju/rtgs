@@ -28,7 +28,7 @@ class ReadableLogger:
         self.log_file.parent.mkdir(exist_ok=True)
         
         # Setup logging
-        self.logger = logging.getLogger("TelanganaAnalyst")
+        self.logger = logging.getLogger("RTGSAnalyst")
         self.logger.setLevel(logging.INFO)
         
         # Rich handler for console

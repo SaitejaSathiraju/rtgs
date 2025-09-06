@@ -1,4 +1,4 @@
-"""Data analysis agent for Telangana Open Data."""
+"""Data analysis agent for dynamic data analysis."""
 
 from crewai import Task
 from .base_agent import BaseAgent
@@ -14,9 +14,9 @@ class DataAnalystAgent(BaseAgent):
         super().__init__(
             name="DataAnalyst",
             role="Senior Data Analyst",
-            goal="Perform comprehensive statistical and analytical analysis of Telangana Open Data to extract actionable insights",
+            goal="Perform comprehensive statistical and analytical analysis of any dataset to extract actionable insights",
             backstory="""You are a senior data analyst with extensive experience in statistical analysis, 
-            data mining, and business intelligence. You have deep knowledge of Telangana's governance, 
+            data mining, and business intelligence. You have deep knowledge of statistical analysis, 
             demographics, and policy areas. You excel at identifying patterns, trends, correlations, 
             and anomalies in government datasets. You can translate complex analytical findings into 
             clear, actionable insights for policy makers and government officials."""

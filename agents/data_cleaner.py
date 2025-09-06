@@ -1,4 +1,4 @@
-"""Data cleaning agent for Telangana Open Data."""
+"""Data cleaning agent for dynamic data analysis."""
 
 from crewai import Task
 from .base_agent import BaseAgent
@@ -11,9 +11,9 @@ class DataCleanerAgent(BaseAgent):
         super().__init__(
             name="DataCleaner",
             role="Data Quality Specialist",
-            goal="Clean and standardize Telangana Open Data to ensure high quality and consistency",
+            goal="Clean and standardize any dataset to ensure high quality and consistency",
             backstory="""You are an expert data quality specialist with deep knowledge of 
-            Telangana's administrative structure, demographics, and data standards. 
+            data quality standards, cleaning techniques, and best practices. 
             You excel at identifying and fixing data quality issues, handling missing values, 
             standardizing formats, and ensuring data consistency across different sources."""
         )

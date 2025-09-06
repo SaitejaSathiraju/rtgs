@@ -1,4 +1,4 @@
-"""Configuration settings for the Telangana AI Analyst."""
+"""Configuration settings for the Real-Time Government System AI Analyst."""
 
 import os
 from pathlib import Path

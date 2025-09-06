@@ -1,4 +1,4 @@
-"""CrewAI agents for Telangana Open Data analysis."""
+"""CrewAI agents for dynamic data analysis."""
 
 from .base_agent import BaseAgent
 from .coordinator_agent import CoordinatorAgent

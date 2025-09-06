@@ -339,12 +339,22 @@ class QABot:
         """Extract location with highest/lowest metric - DYNAMIC."""
         question_lower = question.lower()
         
-        # Find metric column
+        # Find metric column - prioritize numeric columns
         metric_column = None
-        for col in df.columns:
+        numeric_cols = df.select_dtypes(include=['number']).columns
+        
+        # First try to find numeric columns mentioned in question
+        for col in numeric_cols:
             if col.lower() in question_lower:
                 metric_column = col
                 break
+        
+        # If no numeric column found, try all columns
+        if not metric_column:
+            for col in df.columns:
+                if col.lower() in question_lower and col in numeric_cols:
+                    metric_column = col
+                    break
         
         if not metric_column:
             return None
@@ -371,11 +381,11 @@ class QABot:
             if 'highest' in question_lower or 'most' in question_lower:
                 top_location = metric_by_location.index[0]
                 top_value = metric_by_location.iloc[0]
-                return f"🤖 **RTGS AI Analysis**: {location_column} '{top_location}' has the highest {metric_column} with {top_value:,.2f}"
+                return f"🤖 **RTGS AI Analysis**: {location_column} '{top_location}' has the highest {metric_column} with {float(top_value):,.2f}"
             elif 'lowest' in question_lower or 'least' in question_lower:
                 bottom_location = metric_by_location.index[-1]
                 bottom_value = metric_by_location.iloc[-1]
-                return f"🤖 **RTGS AI Analysis**: {location_column} '{bottom_location}' has the lowest {metric_column} with {bottom_value:,.2f}"
+                return f"🤖 **RTGS AI Analysis**: {location_column} '{bottom_location}' has the lowest {metric_column} with {float(bottom_value):,.2f}"
             
         except Exception as e:
             return f"❌ Error calculating metric: {str(e)}"
@@ -399,16 +409,16 @@ class QABot:
         try:
             if 'total' in question_lower:
                 total = df[metric_column].sum()
-                return f"🤖 **RTGS AI Analysis**: Total {metric_column}: {total:,.2f}"
+                return f"🤖 **RTGS AI Analysis**: Total {metric_column}: {float(total):,.2f}"
             elif 'average' in question_lower or 'mean' in question_lower:
                 avg = df[metric_column].mean()
-                return f"🤖 **RTGS AI Analysis**: Average {metric_column}: {avg:,.2f}"
+                return f"🤖 **RTGS AI Analysis**: Average {metric_column}: {float(avg):,.2f}"
             elif 'maximum' in question_lower or 'max' in question_lower:
                 max_val = df[metric_column].max()
-                return f"🤖 **RTGS AI Analysis**: Maximum {metric_column}: {max_val:,.2f}"
+                return f"🤖 **RTGS AI Analysis**: Maximum {metric_column}: {float(max_val):,.2f}"
             elif 'minimum' in question_lower or 'min' in question_lower:
                 min_val = df[metric_column].min()
-                return f"🤖 **RTGS AI Analysis**: Minimum {metric_column}: {min_val:,.2f}"
+                return f"🤖 **RTGS AI Analysis**: Minimum {metric_column}: {float(min_val):,.2f}"
             
         except Exception as e:
             return f"❌ Error calculating metric: {str(e)}"
@@ -518,18 +528,25 @@ STATISTICAL SUMMARY:
                 else:
                     context += f"- {col}: {len(unique_vals)} unique values (too many to list)\n"
             
-            # Add groupby analysis for key columns
-            if 'District' in df.columns:
-                context += f"\nDISTRICT ANALYSIS:\n"
-                district_counts = df['District'].value_counts()
-                context += f"- Total districts: {len(district_counts)}\n"
-                context += f"- District list: {', '.join(district_counts.index.tolist())}\n"
+            # Add dynamic groupby analysis for geographic columns
+            geo_cols = [col for col in df.columns if any(keyword in col.lower() for keyword in ['district', 'city', 'village', 'location', 'place', 'mandal', 'taluk', 'block'])]
+            
+            for geo_col in geo_cols[:2]:  # Limit to top 2 geographic columns
+                context += f"\n{geo_col.upper()} ANALYSIS:\n"
+                geo_counts = df[geo_col].value_counts()
+                context += f"- Total {geo_col.lower()}s: {len(geo_counts)}\n"
+                context += f"- {geo_col} list: {', '.join(geo_counts.index.tolist()[:10])}\n"  # Show top 10
                 
-                if 'Rain (mm)' in df.columns:
-                    district_rainfall = df.groupby('District')['Rain (mm)'].sum().sort_values(ascending=False)
-                    context += f"- Top 5 districts by total rainfall:\n"
-                    for i, (district, rainfall) in enumerate(district_rainfall.head(5).items(), 1):
-                        context += f"  {i}. {district}: {rainfall:.1f} mm\n"
+                # Find numeric columns for aggregation
+                numeric_cols = df.select_dtypes(include=['number']).columns
+                for num_col in numeric_cols[:2]:  # Limit to top 2 numeric columns
+                    try:
+                        geo_agg = df.groupby(geo_col)[num_col].sum().sort_values(ascending=False)
+                        context += f"- Top 5 {geo_col.lower()}s by {num_col}:\n"
+                        for i, (geo, value) in enumerate(geo_agg.head(5).items(), 1):
+                            context += f"  {i}. {geo}: {value:.1f}\n"
+                    except Exception:
+                        continue
             
             # Add domain-specific insights if available
             if 'domain_insights' in analysis['insights']:
@@ -650,7 +667,7 @@ INSTRUCTIONS:
             "🌧️ **Rainfall Questions**:",
             "  • How many drought days are there?",
             "  • What is the total rainfall?",
-            "  • Which district has the highest rainfall?",
+            "  • Which area has the highest values?",
             "",
             "⚡ **Consumption Questions**:",
             "  • How many locations have zero consumption?",
@@ -659,7 +676,7 @@ INSTRUCTIONS:
             "",
             "🔗 **Analysis Questions**:",
             "  • What is the correlation between rainfall and humidity?",
-            "  • Show me the top 5 districts",
+            "  • Show me the top 5 areas",
             "  • What are the statistics for units?"
         ]
         

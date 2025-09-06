@@ -1,4 +1,4 @@
-"""Data processing pipeline for Telangana Open Data."""
+"""Data processing pipeline for Real-Time Government System."""
 
 import pandas as pd
 import numpy as np
@@ -20,7 +20,7 @@ from crewai import Crew, Process
 
 
 class DataProcessor:
-    """Main data processing pipeline for Telangana Open Data."""
+    """Main data processing pipeline for Real-Time Government System."""
     
     def __init__(self):
         """Initialize the data processor."""

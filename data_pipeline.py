@@ -237,120 +237,81 @@ class DataPipeline:
         return standardized_df
     
     def _transform_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Transform the data."""
+        """Transform the data - 100% DYNAMIC, NO hardcoded column names."""
         transformed_df = df.copy()
         
-        # 1. Create derived features
+        # 1. Create derived features for ALL numeric columns
         self.console.print("🔄 Creating derived features...")
         
-        # For rainfall data
-        if 'rain' in ' '.join(transformed_df.columns).lower():
-            rain_col = None
-            for col in transformed_df.columns:
-                if 'rain' in col.lower() and '_' not in col:
-                    rain_col = col
-                    break
-            
-            if rain_col:
-                # Rainfall categories
-                bins = [-np.inf, 0, 5, 20, 50, np.inf]
-                labels = ['No Rain', 'Light Rain', 'Moderate Rain', 'Heavy Rain', 'Extreme Rain']
-                
-                # Ensure labels match number of bins (labels = bins - 1)
-                if len(labels) != len(bins) - 1:
-                    labels = labels[:len(bins)-1]
-                
-                # Handle duplicates by removing them from bins and labels
-                unique_bins = []
-                unique_labels = []
-                for i, bin_val in enumerate(bins[:-1]):
-                    if bin_val not in unique_bins:
-                        unique_bins.append(bin_val)
-                        if i < len(labels):
-                            unique_labels.append(labels[i])
-                unique_bins.append(bins[-1])  # Add the last bin edge
-                
-                transformed_df['rainfall_category'] = pd.cut(
-                    transformed_df[rain_col],
-                    bins=unique_bins,
-                    labels=unique_labels
-                )
-                
-                # Drought indicator
-                transformed_df['drought_indicator'] = (transformed_df[rain_col] == 0).astype(int)
-                
-                # Rainfall intensity
-                transformed_df['rainfall_intensity'] = transformed_df[rain_col] / transformed_df[rain_col].mean()
-                
-                self.console.print(f"✅ Rainfall features created: 3 new features")
+        numeric_cols = transformed_df.select_dtypes(include=[np.number]).columns
+        features_created = 0
         
-        # For consumption data
-        if 'units' in ' '.join(transformed_df.columns).lower():
-            units_col = None
-            for col in transformed_df.columns:
-                if 'units' in col.lower() and '_' not in col:
-                    units_col = col
-                    break
-            
-            if units_col:
-                # Consumption categories - handle case where all values are the same
-                q25 = transformed_df[units_col].quantile(0.25)
-                q75 = transformed_df[units_col].quantile(0.75)
-                
-                # Create bins, ensuring no duplicates and matching labels
-                if q25 == q75:  # All values are the same
-                    bins = [-np.inf, 0, q25, np.inf]
-                    labels = ['No Consumption', 'Low Consumption', 'High Consumption']
-                else:
-                    bins = [-np.inf, 0, q25, q75, np.inf]
-                    labels = ['No Consumption', 'Low Consumption', 'Medium Consumption', 'High Consumption']
-                
-                # Ensure labels match number of bins (labels = bins - 1)
-                if len(labels) != len(bins) - 1:
-                    labels = labels[:len(bins)-1]
-                
-                # Handle duplicates by removing them from bins and labels
-                unique_bins = []
-                unique_labels = []
-                for i, bin_val in enumerate(bins[:-1]):
-                    if bin_val not in unique_bins:
-                        unique_bins.append(bin_val)
-                        if i < len(labels):
-                            unique_labels.append(labels[i])
-                unique_bins.append(bins[-1])  # Add the last bin edge
-                
-                transformed_df['consumption_category'] = pd.cut(
-                    transformed_df[units_col],
-                    bins=unique_bins,
-                    labels=unique_labels
-                )
-                
-                # Outage indicator
-                transformed_df['outage_indicator'] = (transformed_df[units_col] == 0).astype(int)
-                
-                # Consumption efficiency
-                transformed_df['consumption_efficiency'] = transformed_df[units_col] / transformed_df[units_col].mean()
-                
-                self.console.print(f"✅ Consumption features created: 3 new features")
+        for col in numeric_cols:
+            if transformed_df[col].dtype in ['int64', 'float64']:
+                try:
+                    # Dynamic binning based on actual data distribution
+                    q1, q2, q3 = transformed_df[col].quantile([0.25, 0.5, 0.75])
+                    bins = [-np.inf, q1, q2, q3, np.inf]
+                    labels = ['Low', 'Medium-Low', 'Medium-High', 'High']
+                    
+                    # Ensure unique bins and matching labels
+                    unique_bins = []
+                    unique_labels = []
+                    for i, bin_val in enumerate(bins[:-1]):
+                        if bin_val not in unique_bins:
+                            unique_bins.append(bin_val)
+                            if i < len(labels):
+                                unique_labels.append(labels[i])
+                    
+                    unique_bins.append(np.inf)
+                    
+                    if len(unique_bins) > 1:
+                        # Create category feature
+                        transformed_df[f'{col}_category'] = pd.cut(
+                            transformed_df[col], 
+                            bins=unique_bins, 
+                            labels=unique_labels, 
+                            duplicates='drop'
+                        )
+                        
+                        # Create intensity feature (normalized by mean)
+                        transformed_df[f'{col}_intensity'] = transformed_df[col] / transformed_df[col].mean()
+                        
+                        # Create zero indicator
+                        transformed_df[f'{col}_zero_indicator'] = (transformed_df[col] == 0).astype(int)
+                        
+                        features_created += 3
+                        self.console.print(f"✅ Created dynamic features for {col}: {col}_category, {col}_intensity, {col}_zero_indicator")
+                        
+                except Exception as e:
+                    self.console.print(f"⚠️ Could not create features for {col}: {str(e)}")
+                    continue
+        
+        self.console.print(f"✅ Total derived features created: {features_created}")
         
         # 2. Create aggregation features
         self.console.print("🔄 Creating aggregation features...")
         
-        # Group by categorical columns and create aggregations
         categorical_cols = transformed_df.select_dtypes(include=['object']).columns
         numeric_cols = transformed_df.select_dtypes(include=['number']).columns
         
+        aggregation_count = 0
         for cat_col in categorical_cols[:3]:  # Limit to first 3 categorical columns
             for num_col in numeric_cols[:3]:  # Limit to first 3 numeric columns
                 if num_col != cat_col:
-                    # Group statistics
-                    group_stats = transformed_df.groupby(cat_col)[num_col].agg(['mean', 'sum', 'count']).reset_index()
-                    group_stats.columns = [cat_col, f'{num_col}_group_mean', f'{num_col}_group_sum', f'{num_col}_group_count']
-                    
-                    # Merge back
-                    transformed_df = transformed_df.merge(group_stats, on=cat_col, how='left')
+                    try:
+                        # Group statistics
+                        group_stats = transformed_df.groupby(cat_col)[num_col].agg(['mean', 'sum', 'count']).reset_index()
+                        group_stats.columns = [cat_col, f'{num_col}_group_mean', f'{num_col}_group_sum', f'{num_col}_group_count']
+                        
+                        # Merge back
+                        transformed_df = transformed_df.merge(group_stats, on=cat_col, how='left')
+                        aggregation_count += 3
+                    except Exception as e:
+                        self.console.print(f"⚠️ Could not create aggregation for {cat_col} x {num_col}: {str(e)}")
+                        continue
         
-        self.console.print(f"✅ Aggregation features created: {len(categorical_cols) * len(numeric_cols)} features")
+        self.console.print(f"✅ Aggregation features created: {aggregation_count}")
         
         return transformed_df
     
@@ -419,11 +380,8 @@ class DataPipeline:
         plt.close()
         charts_info['data_quality'] = str(quality_chart)
         
-        # 2. Domain-specific charts
-        if 'rain' in ' '.join(raw_df.columns).lower():
-            charts_info.update(self._generate_rainfall_charts(raw_df, cleaned_df, standardized_df, transformed_df, dataset_name, timestamp))
-        elif 'units' in ' '.join(raw_df.columns).lower():
-            charts_info.update(self._generate_consumption_charts(raw_df, cleaned_df, standardized_df, transformed_df, dataset_name, timestamp))
+        # 2. Dynamic domain-specific charts
+        charts_info.update(self._generate_dynamic_charts(raw_df, cleaned_df, standardized_df, transformed_df, dataset_name, timestamp))
         
         # 3. Correlation matrix
         self.console.print("📊 Generating correlation matrix...")
@@ -442,136 +400,69 @@ class DataPipeline:
         
         return charts_info
     
-    def _generate_rainfall_charts(self, raw_df: pd.DataFrame, cleaned_df: pd.DataFrame, 
-                                 standardized_df: pd.DataFrame, transformed_df: pd.DataFrame,
-                                 dataset_name: str, timestamp: str) -> Dict[str, str]:
-        """Generate rainfall-specific charts."""
+    def _generate_dynamic_charts(self, raw_df: pd.DataFrame, cleaned_df: pd.DataFrame, 
+                               standardized_df: pd.DataFrame, transformed_df: pd.DataFrame,
+                               dataset_name: str, timestamp: str) -> Dict[str, str]:
+        """Generate dynamic charts based on actual data - NO hardcoded assumptions."""
         charts_info = {}
         
-        rain_col = None
-        for col in raw_df.columns:
-            if 'rain' in col.lower() and '_' not in col:
-                rain_col = col
-                break
+        # Get numeric columns for analysis
+        numeric_cols = raw_df.select_dtypes(include=['number']).columns
+        categorical_cols = raw_df.select_dtypes(include=['object']).columns
         
-        if not rain_col:
+        if len(numeric_cols) == 0:
             return charts_info
         
-        # Rainfall distribution comparison
-        fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-        fig.suptitle(f'Rainfall Analysis - {dataset_name}', fontsize=16, fontweight='bold')
+        self.console.print("📊 Generating dynamic analysis charts...")
         
-        # Before/After distribution
-        axes[0, 0].hist(raw_df[rain_col].dropna(), alpha=0.7, label='Raw Data', bins=30, color='red')
-        axes[0, 0].hist(cleaned_df[rain_col].dropna(), alpha=0.7, label='Cleaned Data', bins=30, color='green')
-        axes[0, 0].set_title('Rainfall Distribution Comparison')
-        axes[0, 0].set_xlabel('Rainfall (mm)')
+        # 1. Top numeric columns analysis
+        fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+        fig.suptitle(f'Dynamic Data Analysis - {dataset_name}', fontsize=16, fontweight='bold')
+        
+        # Use first numeric column for distribution analysis
+        main_col = numeric_cols[0]
+        
+        # Distribution comparison
+        axes[0, 0].hist(raw_df[main_col].dropna(), alpha=0.7, label='Raw Data', bins=30, color='red')
+        axes[0, 0].hist(cleaned_df[main_col].dropna(), alpha=0.7, label='Cleaned Data', bins=30, color='green')
+        axes[0, 0].set_title(f'Distribution Comparison - {main_col}')
+        axes[0, 0].set_xlabel(main_col)
         axes[0, 0].set_ylabel('Frequency')
         axes[0, 0].legend()
         
-        # Drought analysis
-        if 'drought_indicator' in transformed_df.columns:
-            drought_counts = transformed_df['drought_indicator'].value_counts()
-            axes[0, 1].pie(drought_counts.values, labels=['No Drought', 'Drought'], autopct='%1.1f%%', 
-                          colors=['lightgreen', 'red'])
-            axes[0, 1].set_title('Drought Analysis')
+        # Box plot comparison
+        data_to_plot = [raw_df[main_col].dropna(), cleaned_df[main_col].dropna()]
+        axes[0, 1].boxplot(data_to_plot, labels=['Raw', 'Cleaned'])
+        axes[0, 1].set_title(f'Distribution (Box Plot) - {main_col}')
+        axes[0, 1].set_ylabel(main_col)
         
-        # Rainfall categories
-        if 'rainfall_category' in transformed_df.columns:
-            category_counts = transformed_df['rainfall_category'].value_counts()
-            axes[1, 0].bar(range(len(category_counts)), category_counts.values, color='skyblue')
-            axes[1, 0].set_title('Rainfall Categories')
-            axes[1, 0].set_xlabel('Category')
-            axes[1, 0].set_ylabel('Count')
-            axes[1, 0].set_xticks(range(len(category_counts)))
-            axes[1, 0].set_xticklabels(category_counts.index, rotation=45)
+        # Top categories analysis (if categorical columns exist)
+        if len(categorical_cols) > 0:
+            cat_col = categorical_cols[0]
+            if len(numeric_cols) > 0:
+                top_categories = raw_df.groupby(cat_col)[main_col].sum().sort_values(ascending=False).head(10)
+                axes[1, 0].bar(range(len(top_categories)), top_categories.values)
+                axes[1, 0].set_title(f'Top 10 Categories by {main_col}')
+                axes[1, 0].set_xlabel('Category Rank')
+                axes[1, 0].set_ylabel(f'Total {main_col}')
+                axes[1, 0].set_xticks(range(len(top_categories)))
+                axes[1, 0].set_xticklabels(top_categories.index, rotation=45)
         
-        # Time series if date column exists
-        date_cols = [col for col in raw_df.columns if 'date' in col.lower()]
-        if date_cols:
-            try:
-                date_col = date_cols[0]
-                raw_df[date_col] = pd.to_datetime(raw_df[date_col], errors='coerce')
-                daily_rainfall = raw_df.groupby(raw_df[date_col].dt.date)[rain_col].mean()
-                
-                axes[1, 1].plot(daily_rainfall.index, daily_rainfall.values, color='blue', linewidth=2)
-                axes[1, 1].set_title('Daily Rainfall Trend')
-                axes[1, 1].set_xlabel('Date')
-                axes[1, 1].set_ylabel('Average Rainfall (mm)')
-                axes[1, 1].tick_params(axis='x', rotation=45)
-            except:
-                pass
+        # Transformation effect
+        if f'{main_col}_intensity' in transformed_df.columns:
+            axes[1, 1].hist(transformed_df[f'{main_col}_intensity'].dropna(), bins=30, alpha=0.7, color='purple')
+            axes[1, 1].set_title(f'Intensity Distribution - {main_col}')
+            axes[1, 1].set_xlabel('Intensity Ratio')
+            axes[1, 1].set_ylabel('Frequency')
         
         plt.tight_layout()
-        rainfall_chart = self.charts_dir / f"{dataset_name}_rainfall_analysis_{timestamp}.png"
-        plt.savefig(rainfall_chart, dpi=300, bbox_inches='tight')
+        dynamic_chart = self.charts_dir / f"{dataset_name}_dynamic_analysis_{timestamp}.png"
+        plt.savefig(dynamic_chart, dpi=300, bbox_inches='tight')
         plt.close()
-        charts_info['rainfall_analysis'] = str(rainfall_chart)
+        charts_info['dynamic_analysis'] = str(dynamic_chart)
         
         return charts_info
     
-    def _generate_consumption_charts(self, raw_df: pd.DataFrame, cleaned_df: pd.DataFrame, 
-                                   standardized_df: pd.DataFrame, transformed_df: pd.DataFrame,
-                                   dataset_name: str, timestamp: str) -> Dict[str, str]:
-        """Generate consumption-specific charts."""
-        charts_info = {}
-        
-        units_col = None
-        for col in raw_df.columns:
-            if 'units' in col.lower() and '_' not in col:
-                units_col = col
-                break
-        
-        if not units_col:
-            return charts_info
-        
-        # Consumption distribution comparison
-        fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-        fig.suptitle(f'Consumption Analysis - {dataset_name}', fontsize=16, fontweight='bold')
-        
-        # Before/After distribution
-        axes[0, 0].hist(raw_df[units_col].dropna(), alpha=0.7, label='Raw Data', bins=30, color='red')
-        axes[0, 0].hist(cleaned_df[units_col].dropna(), alpha=0.7, label='Cleaned Data', bins=30, color='green')
-        axes[0, 0].set_title('Consumption Distribution Comparison')
-        axes[0, 0].set_xlabel('Consumption (Units)')
-        axes[0, 0].set_ylabel('Frequency')
-        axes[0, 0].legend()
-        
-        # Outage analysis
-        if 'outage_indicator' in transformed_df.columns:
-            outage_counts = transformed_df['outage_indicator'].value_counts()
-            # Create dynamic labels based on actual values
-            labels = ['Active' if idx == 0 else 'Outage' for idx in outage_counts.index]
-            colors = ['lightgreen' if idx == 0 else 'red' for idx in outage_counts.index]
-            axes[0, 1].pie(outage_counts.values, labels=labels, autopct='%1.1f%%', colors=colors)
-            axes[0, 1].set_title('Outage Analysis')
-        
-        # Consumption categories
-        if 'consumption_category' in transformed_df.columns:
-            category_counts = transformed_df['consumption_category'].value_counts()
-            axes[1, 0].bar(range(len(category_counts)), category_counts.values, color='orange')
-            axes[1, 0].set_title('Consumption Categories')
-            axes[1, 0].set_xlabel('Category')
-            axes[1, 0].set_ylabel('Count')
-            axes[1, 0].set_xticks(range(len(category_counts)))
-            axes[1, 0].set_xticklabels(category_counts.index, rotation=45)
-        
-        # Geographic distribution
-        if 'circle' in raw_df.columns:
-            circle_consumption = raw_df.groupby('circle')[units_col].sum().sort_values(ascending=False).head(10)
-            axes[1, 1].barh(range(len(circle_consumption)), circle_consumption.values, color='purple')
-            axes[1, 1].set_title('Top 10 Circles by Consumption')
-            axes[1, 1].set_xlabel('Total Consumption (Units)')
-            axes[1, 1].set_yticks(range(len(circle_consumption)))
-            axes[1, 1].set_yticklabels(circle_consumption.index)
-        
-        plt.tight_layout()
-        consumption_chart = self.charts_dir / f"{dataset_name}_consumption_analysis_{timestamp}.png"
-        plt.savefig(consumption_chart, dpi=300, bbox_inches='tight')
-        plt.close()
-        charts_info['consumption_analysis'] = str(consumption_chart)
-        
-        return charts_info
     
     def _generate_summary_report(self, raw_df: pd.DataFrame, cleaned_df: pd.DataFrame, 
                                 standardized_df: pd.DataFrame, transformed_df: pd.DataFrame,

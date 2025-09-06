@@ -1,4 +1,4 @@
-"""Data utility functions for Telangana Open Data."""
+"""Data utility functions for Real-Time Government System."""
 
 import pandas as pd
 import numpy as np
@@ -10,18 +10,8 @@ import json
 class DataUtils:
     """Utility class for data processing operations."""
     
-    # Telangana districts (as of 2023)
-    TELANGANA_DISTRICTS = [
-        "Adilabad", "Bhadradri Kothagudem", "Hyderabad", "Jagtial", 
-        "Jangaon", "Jayashankar Bhupalpally", "Jogulamba Gadwal", 
-        "Kamareddy", "Karimnagar", "Khammam", "Komaram Bheem Asifabad",
-        "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", 
-        "Medchal-Malkajgiri", "Mulugu", "Nagarkurnool", "Nalgonda",
-        "Narayanpet", "Nirmal", "Nizamabad", "Peddapalli", 
-        "Rajanna Sircilla", "Rangareddy", "Sangareddy", "Siddipet",
-        "Suryapet", "Vikarabad", "Wanaparthy", "Warangal Urban",
-        "Warangal Rural", "Yadadri Bhuvanagiri"
-    ]
+    # Common geographic regions (dynamic - will be populated from actual data)
+    GEOGRAPHIC_REGIONS = []
     
     @staticmethod
     def standardize_column_names(df: pd.DataFrame) -> pd.DataFrame:
@@ -135,8 +125,8 @@ class DataUtils:
         return profile
     
     @staticmethod
-    def validate_telangana_data(df: pd.DataFrame) -> Dict[str, List[str]]:
-        """Validate data specific to Telangana."""
+    def validate_government_data(df: pd.DataFrame) -> Dict[str, List[str]]:
+        """Validate data for government systems."""
         issues = {
             "district_issues": [],
             "administrative_issues": [],
@@ -157,7 +147,7 @@ class DataUtils:
     
     @staticmethod
     def create_derived_fields(df: pd.DataFrame) -> pd.DataFrame:
-        """Create common derived fields for Telangana data."""
+        """Create common derived fields for government data."""
         df_derived = df.copy()
         
         # Create year field if date column exists

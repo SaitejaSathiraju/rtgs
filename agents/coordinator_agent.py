@@ -14,12 +14,12 @@ class CoordinatorAgent(BaseAgent):
         super().__init__(
             name="Coordinator",
             role="Analysis Coordinator and Task Delegator",
-            goal="Coordinate multi-agent analysis workflows and delegate tasks to specialized agents for comprehensive Telangana Open Data analysis",
+            goal="Coordinate multi-agent analysis workflows and delegate tasks to specialized agents for comprehensive data analysis",
             backstory="""You are an expert project coordinator with deep understanding of data analysis 
             workflows and multi-agent systems. You excel at breaking down complex analysis tasks, 
             delegating work to specialized agents, coordinating their efforts, and synthesizing 
-            results into comprehensive reports. You have extensive experience with Telangana's 
-            data ecosystem and can ensure all analysis components work together seamlessly."""
+            results into comprehensive reports. You have extensive experience with data 
+            ecosystems and can ensure all analysis components work together seamlessly."""
         )
     
     def create_coordination_task(self, dataset_path: str, analysis_type: str = "comprehensive") -> Task:

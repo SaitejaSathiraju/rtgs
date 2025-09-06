@@ -1,81 +1,49 @@
-2025-09-06 16:01:03,733 - TelanganaAnalyst - INFO - 🚀 [bold green]Simple Auto-Discovery[/bold green]: Initialized and ready
-2025-09-06 16:01:03 - SUCCESS: Simple Auto-Discovery - Initialized and ready
-2025-09-06 16:01:03,735 - TelanganaAnalyst - INFO - 🚀 [bold blue]ULTIMATE PROCESSING[/bold blue]: Processing ALL datasets
-2025-09-06 16:01:03 - STAGE: ULTIMATE PROCESSING - Processing ALL datasets
-2025-09-06 16:01:03,736 - TelanganaAnalyst - INFO - 🔍 [bold blue]PROCESSING ALL DATASETS[/bold blue]: Complete auto-discovery
-2025-09-06 16:01:03 - STAGE: PROCESSING ALL DATASETS - Complete auto-discovery
-2025-09-06 16:01:03,737 - TelanganaAnalyst - INFO - 📁 [bold green]Datasets Found[/bold green]: 1 files detected
-2025-09-06 16:01:03 - EVENT: Datasets Found - 1 files detected
-2025-09-06 16:01:03,737 - TelanganaAnalyst - INFO - 🚀 [bold blue]COMPLETE DATASET PROCESSING[/bold blue]: File: ndps_2025_08_0.csv
-2025-09-06 16:01:03 - STAGE: COMPLETE DATASET PROCESSING - File: ndps_2025_08_0.csv
-2025-09-06 16:01:04,656 - TelanganaAnalyst - INFO - 🔬 [bold blue]HYBRID ANALYSIS[/bold blue]: Starting hybrid analysis for C:\Users\User1\Desktop\rtgs -v3\data\ndps_2025_08_0.csv
-2025-09-06 16:01:04 - STAGE: HYBRID ANALYSIS - Starting hybrid analysis for C:\Users\User1\Desktop\rtgs -v3\data\ndps_2025_08_0.csv
-2025-09-06 16:01:04,658 - TelanganaAnalyst - INFO - 📊 [bold green]Dataset Loaded[/bold green]: 18 records, 8 columns
-2025-09-06 16:01:04 - EVENT: Dataset Loaded - 18 records, 8 columns
-2025-09-06 16:01:04,659 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Coordination Task assigned to Coordinator
-2025-09-06 16:01:04 - EVENT: 📋 Task Started - Coordination Task assigned to Coordinator
-2025-09-06 16:01:04,659 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Cleaning Task assigned to DataCleaner
-2025-09-06 16:01:04 - EVENT: 📋 Task Started - Data Cleaning Task assigned to DataCleaner
-2025-09-06 16:01:04,660 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Transformation Task assigned to DataTransformer
-2025-09-06 16:01:04 - EVENT: 📋 Task Started - Data Transformation Task assigned to DataTransformer
-2025-09-06 16:01:04,661 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Analysis Task assigned to DataAnalyst
-2025-09-06 16:01:04 - EVENT: 📋 Task Started - Data Analysis Task assigned to DataAnalyst
-2025-09-06 16:01:04,662 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Summarization Task assigned to DataSummarizer
-2025-09-06 16:01:04 - EVENT: 📋 Task Started - Data Summarization Task assigned to DataSummarizer
-2025-09-06 16:01:04,666 - TelanganaAnalyst - INFO - 🚀 [bold green]Agent Crew Created[/bold green]: 5 agents ready for analysis
-2025-09-06 16:01:04 - EVENT: Agent Crew Created - 5 agents ready for analysis
-2025-09-06 16:01:04,667 - TelanganaAnalyst - INFO - 🎯 [bold green]🚀 Crew Started[/bold green]: RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
-2025-09-06 16:01:04 - EVENT: 🚀 Crew Started - RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
-2025-09-06 16:01:04,669 - TelanganaAnalyst - INFO - 🔄 [bold green]⚙️ Process Started[/bold green]: Hybrid Analysis: Processing ndps_2025_08_0 with 5 agents
-2025-09-06 16:01:04 - EVENT: ⚙️ Process Started - Hybrid Analysis: Processing ndps_2025_08_0 with 5 agents
-2025-09-06 16:01:37,179 - TelanganaAnalyst - INFO - ✅ [bold green]Process Complete[/bold green]: Hybrid Analysis: Completed analysis for ndps_2025_08_0
-2025-09-06 16:01:37 - SUCCESS: Process Complete - Hybrid Analysis: Completed analysis for ndps_2025_08_0
-2025-09-06 16:01:37,180 - TelanganaAnalyst - INFO - ✅ [bold green]Crew Complete[/bold green]: RTGS Analysis Crew: Analysis complete for ndps_2025_08_0
-2025-09-06 16:01:37 - SUCCESS: Crew Complete - RTGS Analysis Crew: Analysis complete for ndps_2025_08_0
-2025-09-06 16:01:37,184 - TelanganaAnalyst - INFO - 📄 [bold green]Report Saved[/bold green]: Hybrid analysis report saved: hybrid_analysis_report_ndps_2025_08_0_20250906_160137.json
-2025-09-06 16:01:37 - EVENT: Report Saved - Hybrid analysis report saved: hybrid_analysis_report_ndps_2025_08_0_20250906_160137.json
-2025-09-06 16:01:37,185 - TelanganaAnalyst - INFO - ✅ [bold green]Hybrid Analysis[/bold green]: Analysis complete for ndps_2025_08_0
-2025-09-06 16:01:37 - SUCCESS: Hybrid Analysis - Analysis complete for ndps_2025_08_0
-2025-09-06 16:01:38,465 - TelanganaAnalyst - INFO - 🤖 [bold blue]AGENT ANALYSIS[/bold blue]: Starting agent-based analysis for C:\Users\User1\Desktop\rtgs -v3\data\ndps_2025_08_0.csv
-2025-09-06 16:01:38 - STAGE: AGENT ANALYSIS - Starting agent-based analysis for C:\Users\User1\Desktop\rtgs -v3\data\ndps_2025_08_0.csv
-2025-09-06 16:01:38,467 - TelanganaAnalyst - INFO - 📊 [bold green]Dataset Loaded[/bold green]: 18 records, 8 columns
-2025-09-06 16:01:38 - EVENT: Dataset Loaded - 18 records, 8 columns
-2025-09-06 16:01:38,469 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Coordination Task assigned to Coordinator
-2025-09-06 16:01:38 - EVENT: 📋 Task Started - Coordination Task assigned to Coordinator
-2025-09-06 16:01:38,470 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Cleaning Task assigned to DataCleaner
-2025-09-06 16:01:38 - EVENT: 📋 Task Started - Data Cleaning Task assigned to DataCleaner
-2025-09-06 16:01:38,470 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Transformation Task assigned to DataTransformer
-2025-09-06 16:01:38 - EVENT: 📋 Task Started - Data Transformation Task assigned to DataTransformer
-2025-09-06 16:01:38,471 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Analysis Task assigned to DataAnalyst
-2025-09-06 16:01:38 - EVENT: 📋 Task Started - Data Analysis Task assigned to DataAnalyst
-2025-09-06 16:01:38,472 - TelanganaAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Summarization Task assigned to DataSummarizer
-2025-09-06 16:01:38 - EVENT: 📋 Task Started - Data Summarization Task assigned to DataSummarizer
-2025-09-06 16:01:38,476 - TelanganaAnalyst - INFO - 🚀 [bold green]Agent Crew Created[/bold green]: 5 agents ready for analysis
-2025-09-06 16:01:38 - EVENT: Agent Crew Created - 5 agents ready for analysis
-2025-09-06 16:01:38,477 - TelanganaAnalyst - INFO - 🎯 [bold green]🚀 Crew Started[/bold green]: RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
-2025-09-06 16:01:38 - EVENT: 🚀 Crew Started - RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
-2025-09-06 16:01:38,479 - TelanganaAnalyst - INFO - 🔄 [bold green]⚙️ Process Started[/bold green]: Agent Analysis: Processing ndps_2025_08_0 with 5 agents
-2025-09-06 16:01:38 - EVENT: ⚙️ Process Started - Agent Analysis: Processing ndps_2025_08_0 with 5 agents
-2025-09-06 16:02:01,484 - TelanganaAnalyst - INFO - ✅ [bold green]Process Complete[/bold green]: Agent Analysis: Completed analysis for ndps_2025_08_0
-2025-09-06 16:02:01 - SUCCESS: Process Complete - Agent Analysis: Completed analysis for ndps_2025_08_0
-2025-09-06 16:02:01,485 - TelanganaAnalyst - INFO - ✅ [bold green]Crew Complete[/bold green]: RTGS Analysis Crew: Analysis complete for ndps_2025_08_0
-2025-09-06 16:02:01 - SUCCESS: Crew Complete - RTGS Analysis Crew: Analysis complete for ndps_2025_08_0
-2025-09-06 16:02:01,488 - TelanganaAnalyst - INFO - 📄 [bold green]Report Saved[/bold green]: Agent analysis report saved: agent_analysis_report_ndps_2025_08_0_20250906_160201.json
-2025-09-06 16:02:01 - EVENT: Report Saved - Agent analysis report saved: agent_analysis_report_ndps_2025_08_0_20250906_160201.json
-2025-09-06 16:02:01,489 - TelanganaAnalyst - INFO - ✅ [bold green]Agent Analysis[/bold green]: Analysis complete for ndps_2025_08_0
-2025-09-06 16:02:01 - SUCCESS: Agent Analysis - Analysis complete for ndps_2025_08_0
-2025-09-06 16:02:01,493 - TelanganaAnalyst - INFO - 💾 [bold green]Metadata Saved[/bold green]: 1 datasets
-2025-09-06 16:02:01 - EVENT: Metadata Saved - 1 datasets
-2025-09-06 16:02:01,494 - TelanganaAnalyst - INFO - ✅ [bold green]Dataset Fully Processed[/bold green]: ndps_2025_08_0.csv: 18 records, 57.76s
-2025-09-06 16:02:01 - SUCCESS: Dataset Fully Processed - ndps_2025_08_0.csv: 18 records, 57.76s
-2025-09-06 16:02:01,495 - TelanganaAnalyst - INFO - ⚡ [bold green]Performance: Complete Processing[/bold green]: Duration: 57.76s, Speed: 0 records/sec
-2025-09-06 16:02:01 - EVENT: Performance: Complete Processing - Duration: 57.76s, Speed: 0 records/sec
-2025-09-06 16:02:01,500 - TelanganaAnalyst - INFO - 🎉 [bold green]All Datasets Processed[/bold green]: 1/1 datasets ready
-2025-09-06 16:02:01 - SUCCESS: All Datasets Processed - 1/1 datasets ready
-2025-09-06 16:02:01,501 - TelanganaAnalyst - INFO - 📊 [bold blue]TERMINAL CHARTS[/bold blue]: Generating terminal charts for all datasets
-2025-09-06 16:02:01 - STAGE: TERMINAL CHARTS - Generating terminal charts for all datasets
-2025-09-06 16:02:01,507 - TelanganaAnalyst - INFO - 📋 [bold blue]EXECUTIVE SUMMARIES[/bold blue]: Generating executive summaries for all datasets
-2025-09-06 16:02:01 - STAGE: EXECUTIVE SUMMARIES - Generating executive summaries for all datasets
-2025-09-06 16:02:01 - SESSION_SUMMARY: {'duration': 'Complete', 'datasets': 1, 'questions': 'Unlimited', 'charts': 'Generated for all', 'errors': 0}
-2025-09-06 16:55:30,655 - TelanganaAnalyst - INFO - 📋 [bold blue]Executive Summary[/bold blue]: Dataset: data/ndps_2025_08_0.csv
-2025-09-06 16:55:30 - STAGE: Executive Summary - Dataset: data/ndps_2025_08_0.csv
+2025-09-06 19:04:17,234 - RTGSAnalyst - INFO - 🚀 [bold green]Simple Auto-Discovery[/bold green]: Initialized and ready
+2025-09-06 19:04:17 - SUCCESS: Simple Auto-Discovery - Initialized and ready
+2025-09-06 19:04:17,236 - RTGSAnalyst - INFO - 🚀 [bold blue]ULTIMATE PROCESSING[/bold blue]: Processing ALL datasets
+2025-09-06 19:04:17 - STAGE: ULTIMATE PROCESSING - Processing ALL datasets
+2025-09-06 19:04:17,237 - RTGSAnalyst - INFO - 🔍 [bold blue]PROCESSING ALL DATASETS[/bold blue]: Complete auto-discovery
+2025-09-06 19:04:17 - STAGE: PROCESSING ALL DATASETS - Complete auto-discovery
+2025-09-06 19:04:17,238 - RTGSAnalyst - INFO - 📁 [bold green]Datasets Found[/bold green]: 1 files detected
+2025-09-06 19:04:17 - EVENT: Datasets Found - 1 files detected
+2025-09-06 19:04:17,246 - RTGSAnalyst - INFO - 🚀 [bold blue]COMPLETE DATASET PROCESSING[/bold blue]: File: ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:04:17 - STAGE: COMPLETE DATASET PROCESSING - File: ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:04:17,903 - RTGSAnalyst - ERROR - ❌ [bold red]Processing Error[/bold red]: _suppress_pydantic_deprecation_warnings.<locals>.filtered_warn() got an unexpected keyword argument 'skip_file_prefixes'
+2025-09-06 19:04:17 - ERROR: Processing Error - _suppress_pydantic_deprecation_warnings.<locals>.filtered_warn() got an unexpected keyword argument 'skip_file_prefixes'
+2025-09-06 19:04:17,904 - RTGSAnalyst - INFO - 🎉 [bold green]All Datasets Processed[/bold green]: 0/1 datasets ready
+2025-09-06 19:04:17 - SUCCESS: All Datasets Processed - 0/1 datasets ready
+2025-09-06 19:04:17,905 - RTGSAnalyst - INFO - 📊 [bold blue]TERMINAL CHARTS[/bold blue]: Generating terminal charts for all datasets
+2025-09-06 19:04:17 - STAGE: TERMINAL CHARTS - Generating terminal charts for all datasets
+2025-09-06 19:04:17,927 - RTGSAnalyst - INFO - 📋 [bold blue]EXECUTIVE SUMMARIES[/bold blue]: Generating executive summaries for all datasets
+2025-09-06 19:04:17 - STAGE: EXECUTIVE SUMMARIES - Generating executive summaries for all datasets
+2025-09-06 19:04:17,939 - RTGSAnalyst - INFO - 🤖 [bold blue]AGENT ANALYSIS[/bold blue]: Running agent analysis for all datasets
+2025-09-06 19:04:17 - STAGE: AGENT ANALYSIS - Running agent analysis for all datasets
+2025-09-06 19:04:19,198 - RTGSAnalyst - INFO - 🤖 [bold blue]AGENT ANALYSIS[/bold blue]: Starting agent-based analysis for C:\Users\User1\Desktop\rtgs -v3\data\ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:04:19 - STAGE: AGENT ANALYSIS - Starting agent-based analysis for C:\Users\User1\Desktop\rtgs -v3\data\ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:04:19,200 - RTGSAnalyst - INFO - 📊 [bold green]Dataset Loaded[/bold green]: 163 records, 13 columns
+2025-09-06 19:04:19 - EVENT: Dataset Loaded - 163 records, 13 columns
+2025-09-06 19:04:19,201 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Coordination Task assigned to Coordinator
+2025-09-06 19:04:19 - EVENT: 📋 Task Started - Coordination Task assigned to Coordinator
+2025-09-06 19:04:19,202 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Cleaning Task assigned to DataCleaner
+2025-09-06 19:04:19 - EVENT: 📋 Task Started - Data Cleaning Task assigned to DataCleaner
+2025-09-06 19:04:19,202 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Transformation Task assigned to DataTransformer
+2025-09-06 19:04:19 - EVENT: 📋 Task Started - Data Transformation Task assigned to DataTransformer
+2025-09-06 19:04:19,203 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Analysis Task assigned to DataAnalyst
+2025-09-06 19:04:19 - EVENT: 📋 Task Started - Data Analysis Task assigned to DataAnalyst
+2025-09-06 19:04:19,204 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Summarization Task assigned to DataSummarizer
+2025-09-06 19:04:19 - EVENT: 📋 Task Started - Data Summarization Task assigned to DataSummarizer
+2025-09-06 19:04:19,207 - RTGSAnalyst - INFO - 🚀 [bold green]Agent Crew Created[/bold green]: 5 agents ready for analysis
+2025-09-06 19:04:19 - EVENT: Agent Crew Created - 5 agents ready for analysis
+2025-09-06 19:04:19,208 - RTGSAnalyst - INFO - 🎯 [bold green]🚀 Crew Started[/bold green]: RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
+2025-09-06 19:04:19 - EVENT: 🚀 Crew Started - RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
+2025-09-06 19:04:19,210 - RTGSAnalyst - INFO - 🔄 [bold green]⚙️ Process Started[/bold green]: Agent Analysis: Processing ts_industry_tsipass_01-08-2025_31-08-2025 with 5 agents
+2025-09-06 19:04:19 - EVENT: ⚙️ Process Started - Agent Analysis: Processing ts_industry_tsipass_01-08-2025_31-08-2025 with 5 agents
+2025-09-06 19:04:50,051 - RTGSAnalyst - INFO - ✅ [bold green]Process Complete[/bold green]: Agent Analysis: Completed analysis for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:04:50 - SUCCESS: Process Complete - Agent Analysis: Completed analysis for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:04:50,052 - RTGSAnalyst - INFO - ✅ [bold green]Crew Complete[/bold green]: RTGS Analysis Crew: Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:04:50 - SUCCESS: Crew Complete - RTGS Analysis Crew: Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:04:50,057 - RTGSAnalyst - INFO - 📄 [bold green]Report Saved[/bold green]: Agent analysis report saved: agent_analysis_report_ts_industry_tsipass_01-08-2025_31-08-2025_20250906_190450.json
+2025-09-06 19:04:50 - EVENT: Report Saved - Agent analysis report saved: agent_analysis_report_ts_industry_tsipass_01-08-2025_31-08-2025_20250906_190450.json
+2025-09-06 19:04:50,058 - RTGSAnalyst - INFO - ✅ [bold green]Agent Analysis[/bold green]: Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:04:50 - SUCCESS: Agent Analysis - Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:04:50 - SESSION_SUMMARY: {'duration': 'Complete', 'datasets': 0, 'questions': 'Unlimited', 'charts': 'Generated for all', 'errors': 0}

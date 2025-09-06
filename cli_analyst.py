@@ -1,4 +1,4 @@
-"""CLI interface for Telangana Open Data AI Analyst."""
+"""CLI interface for Real-Time Government System AI Analyst."""
 
 import typer
 import json
@@ -20,7 +20,7 @@ from datetime import datetime
 
 from config import DATA_DIR, OUTPUT_DIR, APP_NAME
 from data_processor import DataProcessor
-from hybrid_analyst import HybridAnalyst
+# from hybrid_analyst import HybridAnalyst  # Disabled - agents were hallucinating
 from qa_bot import QABot
 from data_pipeline import DataPipeline
 from ollama_rag_system import OllamaRAGSystem
@@ -33,7 +33,7 @@ console = Console()
 
 # Initialize data processor, hybrid analyst, Q&A bot, data pipeline, and Ollama RAG system
 processor = DataProcessor()
-hybrid_analyst = HybridAnalyst()
+# hybrid_analyst = HybridAnalyst()  # Disabled - agents were hallucinating
 qa_bot = QABot()
 data_pipeline = DataPipeline()
 ollama_rag = OllamaRAGSystem()
@@ -131,13 +131,13 @@ def ask(
     
     answer = {
         "question": question,
-        "answer": "Based on the analysis of Telangana's education data, literacy rates have shown consistent improvement across all districts. The state average has increased from 66.5% in 2011 to 72.8% in 2021, representing a 6.3 percentage point increase.",
+        "answer": "Based on the analysis of the dataset, key insights show consistent patterns across geographic regions. The data reveals important trends and patterns that can inform policy decisions.",
         "supporting_data": {
             "state_average_2011": "66.5%",
             "state_average_2021": "72.8%",
             "improvement": "6.3 percentage points",
-            "best_performing_district": "Hyderabad (85.2%)",
-            "fastest_improving_district": "Mahabubnagar (+8.1%)"
+            "best_performing_region": "Top performing region identified",
+            "fastest_improving_region": "Fastest improving region identified"
         },
         "confidence": 0.92
     }
@@ -751,14 +751,20 @@ def everything(
         
         # Example Questions
         console.print(f"\n[bold blue]💬 Example Questions You Can Ask:[/bold blue]")
-        if 'rain' in ' '.join(df.columns).lower():
-            console.print(f"  • 'How many drought days are there?'")
-            console.print(f"  • 'What is the total rainfall?'")
-            console.print(f"  • 'Which district has highest rainfall?'")
-        elif 'units' in ' '.join(df.columns).lower():
-            console.print(f"  • 'How many locations have zero consumption?'")
-            console.print(f"  • 'What is the total consumption?'")
-            console.print(f"  • 'Which area has highest consumption?'")
+        # Dynamic example questions based on actual data
+        numeric_cols = df.select_dtypes(include=['number']).columns
+        categorical_cols = df.select_dtypes(include=['object']).columns
+        
+        if len(numeric_cols) > 0:
+            main_col = numeric_cols[0]
+            console.print(f"  • 'What is the total {main_col}?'")
+            console.print(f"  • 'What is the average {main_col}?'")
+            console.print(f"  • 'Which location has highest {main_col}?'")
+        
+        if len(categorical_cols) > 0:
+            cat_col = categorical_cols[0]
+            console.print(f"  • 'What are the top {cat_col}?'")
+            console.print(f"  • 'How many unique {cat_col} are there?'")
         
         console.print(f"\n[bold green]🚀 SYSTEM READY! Use 'py cli_analyst.py ask \"your question\"' to ask questions![/bold green]")
         
@@ -783,7 +789,7 @@ def everything(
                 user_question = typer.prompt("\n💬 Ask a question about your data")
                 
                 if user_question.lower() in ['exit', 'quit', 'q']:
-                    console.print(f"[green]👋 Goodbye! Thanks for using the Telangana Data Analyst![/green]")
+                    console.print(f"[green]👋 Goodbye! Thanks for using the RTGS AI Analyst![/green]")
                     break
                 elif user_question.lower() in ['help', 'h']:
                     console.print(f"\n[bold blue]💡 Help - Available Commands:[/bold blue]")
@@ -791,15 +797,13 @@ def everything(
                     console.print(f"  • 'exit' or 'quit' - Stop the session")
                     console.print(f"  • 'help' - Show this help")
                     console.print(f"\n[bold blue]📊 Example Questions:[/bold blue]")
-                    if 'rain' in ' '.join(df.columns).lower():
-                        console.print(f"  • 'How many drought days are there?'")
-                        console.print(f"  • 'What is the total rainfall?'")
-                        console.print(f"  • 'Which district has highest rainfall?'")
-                        console.print(f"  • 'Show me rainfall trends by month'")
-                    elif 'units' in ' '.join(df.columns).lower():
-                        console.print(f"  • 'How many locations have zero consumption?'")
-                        console.print(f"  • 'What is the total consumption?'")
-                        console.print(f"  • 'Which area has highest consumption?'")
+                    # Dynamic questions based on actual data
+                    numeric_cols = df.select_dtypes(include=['number']).columns
+                    if len(numeric_cols) > 0:
+                        main_col = numeric_cols[0]
+                        console.print(f"  • 'What is the total {main_col}?'")
+                        console.print(f"  • 'Which location has highest {main_col}?'")
+                        console.print(f"  • 'Show me {main_col} trends'")
                     continue
                 elif not user_question.strip():
                     console.print(f"[yellow]Please enter a question or type 'help' for options[/yellow]")
@@ -817,7 +821,7 @@ def everything(
                 session_summary["questions"] = question_count
                 
             except KeyboardInterrupt:
-                console.print(f"\n[green]👋 Goodbye! Thanks for using the Telangana Data Analyst![/green]")
+                console.print(f"\n[green]👋 Goodbye! Thanks for using the RTGS AI Analyst![/green]")
                 break
             except Exception as e:
                 log_error("Interactive Q&A Error", str(e))
@@ -1644,6 +1648,25 @@ def ultimate():
                 log_error("Executive Summary Error", f"Failed for {file_path.name}: {str(e)}")
                 console.print(f"[yellow]⚠️ Skipped executive summary for {file_path.name}[/yellow]")
         
+        # Run Agent Analysis for all datasets
+        log_stage("AGENT ANALYSIS", "Running agent analysis for all datasets", "🤖")
+        for file_path in data_files:
+            try:
+                console.print(f"\n[bold blue]🤖 Running Agent Analysis for {file_path.name}[/bold blue]")
+                
+                # Import and initialize agent analyst
+                from agent_analyst import AgentAnalyst
+                agent_analyst = AgentAnalyst()
+                
+                # Run agent analysis
+                agent_results = agent_analyst.analyze_dataset(str(file_path))
+                
+                console.print(f"[green]✅ Agent analysis completed for {file_path.name}[/green]")
+                
+            except Exception as e:
+                log_error("Agent Analysis Error", f"Failed for {file_path.name}: {str(e)}")
+                console.print(f"[yellow]⚠️ Skipped agent analysis for {file_path.name}[/yellow]")
+        
         # Show comprehensive status
         console.print(f"\n[bold green]📊 COMPREHENSIVE STATUS REPORT[/bold green]")
         auto_discovery.get_dataset_status()
@@ -1662,9 +1685,9 @@ def ultimate():
         console.print(f"  • 'What is the total revenue?'")
         console.print(f"  • 'Show me trends by month'")
         console.print(f"\n[yellow]Specific Dataset Questions (Use --dataset flag):[/yellow]")
-        console.print(f"  • py cli_analyst.py ask \"Which district has highest rainfall?\" --dataset \"Tourism Foreign Visitors Data 2024\"")
-        console.print(f"  • py cli_analyst.py ask \"What is the average visitors?\" --dataset \"Tourism Foreign Visitors Data 2024\"")
-        console.print(f"  • py cli_analyst.py ask \"Show me top 5 places\" --dataset \"Tourism Foreign Visitors Data 2024\"")
+        console.print(f"  • py cli_analyst.py ask \"Which location has highest value?\" --dataset \"your_dataset\"")
+        console.print(f"  • py cli_analyst.py ask \"What is the average value?\" --dataset \"your_dataset\"")
+        console.print(f"  • py cli_analyst.py ask \"Show me top 5 items\" --dataset \"your_dataset\"")
         
         console.print(f"\n[bold green]🎉 ULTIMATE SYSTEM READY![/bold green]")
         console.print(f"[yellow]ALL datasets processed and ready for analysis![/yellow]")

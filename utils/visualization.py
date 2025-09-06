@@ -1,4 +1,4 @@
-"""Visualization utilities for Telangana Open Data."""
+"""Visualization utilities for Real-Time Government System."""
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -14,8 +14,8 @@ from plotly.subplots import make_subplots
 class VisualizationUtils:
     """Utility class for creating visualizations."""
     
-    # Telangana color scheme
-    TELANGANA_COLORS = {
+    # Government data color scheme
+    GOVERNMENT_COLORS = {
         'primary': '#2c5aa0',
         'secondary': '#f4a261', 
         'accent': '#e76f51',
@@ -28,9 +28,9 @@ class VisualizationUtils:
     def setup_plot_style():
         """Setup consistent plotting style."""
         plt.style.use('seaborn-v0_8')
-        sns.set_palette(list(VisualizationUtils.TELANGANA_COLORS.values()))
+        sns.set_palette(list(VisualizationUtils.GOVERNMENT_COLORS.values()))
         
-        # Set Telangana-specific styling
+        # Set government-specific styling
         plt.rcParams.update({
             'figure.figsize': (12, 8),
             'font.size': 12,
@@ -251,7 +251,7 @@ class VisualizationUtils:
             )
         
         fig.update_layout(
-            title_text="Telangana Data Analysis Dashboard",
+            title_text="Government Data Analysis Dashboard",
             showlegend=False,
             height=600
         )

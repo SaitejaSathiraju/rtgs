@@ -1,4 +1,4 @@
-"""Data transformation agent for Telangana Open Data."""
+"""Data transformation agent for dynamic data analysis."""
 
 from crewai import Task
 from .base_agent import BaseAgent
@@ -13,11 +13,11 @@ class DataTransformerAgent(BaseAgent):
         super().__init__(
             name="DataTransformer",
             role="Data Transformation Specialist",
-            goal="Transform and restructure Telangana Open Data into optimal formats for analysis and decision-making",
+            goal="Transform and restructure any dataset into optimal formats for analysis and decision-making",
             backstory="""You are an expert data transformation specialist with deep knowledge of 
             data engineering, feature engineering, and data restructuring techniques. You excel at 
             identifying transformation opportunities, creating derived features, normalizing data, 
-            and restructuring datasets for optimal analysis. You understand Telangana's data patterns 
+            and restructuring datasets for optimal analysis. You understand data transformation patterns 
             and can suggest the best transformations for government datasets."""
         )
     

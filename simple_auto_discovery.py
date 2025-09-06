@@ -19,7 +19,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskPr
 
 from config import DATA_DIR, OUTPUT_DIR
 from data_processor import DataProcessor
-from hybrid_analyst import HybridAnalyst
+# from hybrid_analyst import HybridAnalyst  # DISABLED: Agents generate boilerplate instead of real data
 from qa_bot import QABot
 from data_pipeline import DataPipeline
 from readable_logger import readable_logger, log_stage, log_event, log_success, log_error, log_performance
@@ -34,7 +34,7 @@ class SimpleAutoDiscovery:
         
         # Initialize processors (without RAG for now)
         self.data_processor = DataProcessor()
-        self.hybrid_analyst = HybridAnalyst()
+        # self.hybrid_analyst = HybridAnalyst()  # DISABLED: Agents generate boilerplate instead of real data
         self.qa_bot = QABot()
         self.data_pipeline = DataPipeline()
         
@@ -109,7 +109,8 @@ class SimpleAutoDiscovery:
             
             # Step 2: Hybrid Analysis
             readable_logger.start_loading(f"📊 Analyzing {file_path.name} - Generating Insights...")
-            analysis_result = self.hybrid_analyst.analyze_dataset(str(file_path))
+            # analysis_result = self.hybrid_analyst.analyze_dataset(str(file_path))  # DISABLED: Agents generate boilerplate
+            analysis_result = {"status": "skipped", "reason": "Agent analysis disabled - generates boilerplate instead of real data"}
             readable_logger.finish_progress("✅ Analysis Complete")
             
             # Step 2.5: Agent Analysis

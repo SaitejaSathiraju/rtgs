@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-100% Ollama-Powered RAG System for Telangana Data
+100% Ollama-Powered RAG System for Government Data
 Zero predefined responses - Everything handled by Ollama with dataset as RAG knowledge base
 """
 
@@ -318,7 +318,7 @@ What anomalies, outliers, or unusual patterns do you detect in this data?
         """Generate answer using Ollama with RAG context."""
         
         prompt = f"""
-You are an expert data analyst for Telangana Open Data. You have access to comprehensive dataset information through RAG (Retrieval-Augmented Generation).
+You are an expert data analyst for government data. You have access to comprehensive dataset information through RAG (Retrieval-Augmented Generation).
 
 CONTEXT FROM DATASETS:
 {context}
@@ -372,7 +372,7 @@ ANSWER:
 • "What anomalies are present in the datasets?"
 • "How can this data be used for policy making?"
 • "What are the key findings across all datasets?"
-• "Which dataset is most important for Telangana development?"
+• "Which dataset is most important for development?"
 """)
                     continue
                 
@@ -411,5 +411,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
