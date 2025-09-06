@@ -1,0 +1,34 @@
+{
+  "C:\\Users\\User1\\Desktop\\rtgs -v3\\data\\ts_industry_tsipass_01-08-2025_31-08-2025.csv": {
+    "name": "ts_industry_tsipass_01-08-2025_31-08-2025.csv",
+    "hash": "72025a72c330e13c1b895b75e5d736f6",
+    "processed_at": "2025-09-06T15:28:33.189303",
+    "records": 163,
+    "columns": [
+      "district_name",
+      "mandal_name",
+      "village_name",
+      "name_of_the_unit",
+      "line_of_activity",
+      "sector",
+      "investment",
+      "number_of_employees",
+      "application_date",
+      "approval_date",
+      "progress_of_implementation",
+      "is_online",
+      "social_status"
+    ],
+    "pipeline_files": {
+      "raw": "output\\raw_data\\ts_industry_tsipass_01-08-2025_31-08-2025_raw_20250906_152731.csv",
+      "cleaned": "output\\cleaned_data\\ts_industry_tsipass_01-08-2025_31-08-2025_cleaned_20250906_152731.csv",
+      "standardized": "output\\standardized_data\\ts_industry_tsipass_01-08-2025_31-08-2025_standardized_20250906_152731.csv",
+      "transformed": "output\\transformed_data\\ts_industry_tsipass_01-08-2025_31-08-2025_transformed_20250906_152731.csv"
+    },
+    "charts": {
+      "data_quality": "output\\charts\\ts_industry_tsipass_01-08-2025_31-08-2025_data_quality_20250906_152731.png",
+      "correlation": "output\\charts\\ts_industry_tsipass_01-08-2025_31-08-2025_correlation_20250906_152731.png"
+    },
+    "analysis_insights": 0
+  }
+}

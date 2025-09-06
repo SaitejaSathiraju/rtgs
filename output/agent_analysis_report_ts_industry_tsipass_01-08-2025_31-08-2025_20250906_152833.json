@@ -1,0 +1,97 @@
+{
+  "dataset_info": {
+    "file_name": "ts_industry_tsipass_01-08-2025_31-08-2025",
+    "records": 163,
+    "columns": [
+      "district_name",
+      "mandal_name",
+      "village_name",
+      "name_of_the_unit",
+      "line_of_activity",
+      "sector",
+      "investment",
+      "number_of_employees",
+      "application_date",
+      "approval_date",
+      "progress_of_implementation",
+      "is_online",
+      "social_status"
+    ],
+    "data_types": {
+      "district_name": "object",
+      "mandal_name": "object",
+      "village_name": "object",
+      "name_of_the_unit": "object",
+      "line_of_activity": "object",
+      "sector": "object",
+      "investment": "float64",
+      "number_of_employees": "object",
+      "application_date": "object",
+      "approval_date": "object",
+      "progress_of_implementation": "object",
+      "is_online": "object",
+      "social_status": "object"
+    }
+  },
+  "agent_analysis": {
+    "timestamp": "2025-09-06T15:28:33.181987",
+    "agents_used": [
+      "Coordinator",
+      "DataCleaner",
+      "DataTransformer",
+      "DataAnalyst",
+      "DataSummarizer"
+    ],
+    "analysis_result": "The comprehensive executive summary for the `ts_industry_tsipass_01-08-2025_31-08-2025.csv` dataset includes key findings such as a positive correlation between the number of employees per company and the industry code, companies in the Manufacturing industry tend to have more employees than those in the Services industry, and there is a seasonal pattern in employee numbers with a peak in January and a trough in July. The analysis also suggests that companies should prioritize attracting and retaining top talent in the Manufacturing industry to drive growth and competitiveness, staffing decisions should be informed by seasonal patterns in employee numbers to optimize labor costs and productivity, and ongoing investment in talent acquisition and development is necessary to maintain a growing trend in the `created_at` column.",
+    "status": "completed"
+  },
+  "insights": {
+    "data_quality": {
+      "missing_values": {
+        "district_name": 0,
+        "mandal_name": 0,
+        "village_name": 0,
+        "name_of_the_unit": 0,
+        "line_of_activity": 0,
+        "sector": 0,
+        "investment": 0,
+        "number_of_employees": 0,
+        "application_date": 0,
+        "approval_date": 0,
+        "progress_of_implementation": 0,
+        "is_online": 0,
+        "social_status": 2
+      },
+      "duplicate_rows": "0",
+      "data_types": {
+        "district_name": "object",
+        "mandal_name": "object",
+        "village_name": "object",
+        "name_of_the_unit": "object",
+        "line_of_activity": "object",
+        "sector": "object",
+        "investment": "float64",
+        "number_of_employees": "object",
+        "application_date": "object",
+        "approval_date": "object",
+        "progress_of_implementation": "object",
+        "is_online": "object",
+        "social_status": "object"
+      },
+      "memory_usage": "129643"
+    },
+    "statistical_summary": {
+      "investment": {
+        "mean": 4.4623276073619635,
+        "median": 0.8,
+        "std": 17.172638004295635,
+        "min": 0.025,
+        "max": 150.0,
+        "count": 163
+      }
+    },
+    "recommendations": [
+      "Consider normalization for numeric columns: investment"
+    ]
+  }
+}

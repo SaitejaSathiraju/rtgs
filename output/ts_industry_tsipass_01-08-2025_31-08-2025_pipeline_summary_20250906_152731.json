@@ -1,0 +1,44 @@
+{
+  "dataset_name": "ts_industry_tsipass_01-08-2025_31-08-2025",
+  "timestamp": "20250906_152731",
+  "pipeline_steps": {
+    "raw_data": {
+      "records": 163,
+      "columns": 13,
+      "missing_values": 2,
+      "data_types": {
+        "district_name": "object",
+        "mandal_name": "object",
+        "village_name": "object",
+        "name_of_the_unit": "object",
+        "line_of_activity": "object",
+        "sector": "object",
+        "investment": "float64",
+        "number_of_employees": "object",
+        "application_date": "object",
+        "approval_date": "object",
+        "progress_of_implementation": "object",
+        "is_online": "object",
+        "social_status": "object"
+      }
+    },
+    "cleaned_data": {
+      "records": 163,
+      "columns": 13,
+      "missing_values": 0,
+      "outliers_handled": "Yes"
+    },
+    "standardized_data": {
+      "records": 163,
+      "columns": 42,
+      "numeric_standardized": 1,
+      "categorical_encoded": 20
+    },
+    "transformed_data": {
+      "records": 163,
+      "columns": 69,
+      "derived_features": 27,
+      "aggregation_features": 27
+    }
+  }
+}

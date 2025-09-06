@@ -1,0 +1,46 @@
+EXECUTIVE SUMMARY: TS_INDUSTRY_TSIPASS_01-08-2025_31-08-2025
+==================================================
+
+📊 DATASET OVERVIEW
+• Total Records: 163
+• Total Columns: 13
+• Data Types: {dtype('O'): np.int64(12), dtype('float64'): np.int64(1)}
+
+🔍 DATA QUALITY ASSESSMENT
+⚠️ Data Quality Issues:
+  • social_status: 2 missing (1.2%)
+✅ No duplicate records found
+
+📈 KEY STATISTICS
+• investment:
+  - Mean: 4.46
+  - Std Dev: 17.17
+  - Range: 0.03 to 150.00
+
+📊 CATEGORICAL INSIGHTS
+• district_name - Top 3 values:
+  - Rangareddy: 22 (13.5%)
+  - Medchal: 19 (11.7%)
+  - Sangareddy: 12 (7.4%)
+• mandal_name - Top 3 values:
+  - Qutubullapur: 8 (4.9%)
+  - Nandigama: 6 (3.7%)
+  - Bibinagar: 6 (3.7%)
+• village_name - Top 3 values:
+  - Rairaopet: 6 (3.7%)
+  - Jeedimetla: 6 (3.7%)
+  - Nandigama: 5 (3.1%)
+
+🎯 POLICY RECOMMENDATIONS
+• Implement data collection improvements to reduce missing values
+• Monitor key metrics for trend analysis
+• Analyze categorical patterns for targeted interventions
+
+📋 NEXT STEPS
+• Review data quality issues and implement fixes
+• Conduct deeper analysis on key variables
+• Develop monitoring dashboards
+• Schedule regular data reviews
+
+Generated on: 2025-09-06 15:28:33
+Analysis System: RTGS AI Analyst
