@@ -198,10 +198,279 @@ class QABot:
         return list(self.datasets.keys())[0]
     
     def _generate_answer(self, question: str, analysis: Dict[str, Any], df: pd.DataFrame) -> str:
-        """Generate answer based on question and analysis - 100% Ollama powered."""
-        # ALWAYS use Ollama - no predefined responses
+        """Generate answer based on question and analysis - 100% data-driven."""
+        # First try to extract specific data based on the question
+        specific_answer = self._extract_specific_data(question, df)
+        if specific_answer:
+            return specific_answer
+        
+        # If no specific data found, use Ollama with full context
         return self._answer_with_ollama(question, analysis, df)
     
+    def _extract_specific_data(self, question: str, df: pd.DataFrame) -> str:
+        """Extract specific data based on question patterns - NO HARDCODED VALUES."""
+        question_lower = question.lower()
+        
+        # Pattern: "names of [column] in [location_column] [location_value]"
+        if 'names of' in question_lower and 'in' in question_lower:
+            return self._extract_names_by_location(question, df)
+        
+        # Pattern: "which [location_column] has [metric]"
+        if 'which' in question_lower and 'has' in question_lower:
+            return self._extract_location_by_metric(question, df)
+        
+        # Pattern: "what is the [metric]"
+        if 'what is the' in question_lower:
+            return self._extract_metric_value(question, df)
+        
+        # Pattern: "show me [top/bottom] [number] [items]"
+        if 'show me' in question_lower or 'top' in question_lower or 'bottom' in question_lower:
+            return self._extract_top_bottom_items(question, df)
+        
+        return None
+    
+    def _extract_names_by_location(self, question: str, df: pd.DataFrame) -> str:
+        """Extract names of items in a specific location - DYNAMIC."""
+        question_lower = question.lower()
+        
+        # Find the location value in the question
+        location_value = None
+        location_column = None
+        
+        # Check all columns for potential location values - COMPLETELY DYNAMIC
+        location_keywords = ['village', 'district', 'city', 'town', 'location', 'place', 'area', 'region', 'mandal', 'taluk', 'block']
+        
+        # First pass: look for columns with location-related keywords
+        for keyword in location_keywords:
+            for col in df.columns:
+                if keyword in col.lower():
+                    unique_values = df[col].str.lower().unique() if df[col].dtype == 'object' else []
+                    for value in unique_values:
+                        if str(value).lower() in question_lower:
+                            location_value = value
+                            location_column = col
+                            break
+                    if location_value:
+                        break
+            if location_value:
+                break
+        
+        # Second pass: if no location column found, check all text columns
+        if not location_value:
+            for col in df.columns:
+                if df[col].dtype == 'object':  # Text columns
+                    unique_values = df[col].str.lower().unique()
+                    for value in unique_values:
+                        if str(value).lower() in question_lower:
+                            location_value = value
+                            location_column = col
+                            break
+                    if location_value:
+                        break
+        
+        if not location_value or not location_column:
+            return None
+        
+        # Find the column to extract names from - COMPLETELY DYNAMIC
+        name_column = None
+        
+        # Look for any column that might contain names/identifiers
+        # Priority: columns with 'name', 'title', 'company', 'business', 'firm', 'entity'
+        name_keywords = ['name', 'title', 'company', 'business', 'firm', 'entity', 'organization', 'institution']
+        
+        # First pass: look for columns with name-related keywords, prioritizing business names
+        for keyword in name_keywords:
+            for col in df.columns:
+                if keyword in col.lower():
+                    # Skip columns that are likely license types or IDs
+                    if 'license' in col.lower() and 'type' in col.lower():
+                        continue
+                    if 'license' in col.lower() and 'name' in col.lower():
+                        # Check if this column has unique values (likely business names)
+                        unique_ratio = df[col].nunique() / len(df)
+                        if unique_ratio < 0.1:  # Less than 10% unique values, skip
+                            continue
+                    name_column = col
+                    break
+            if name_column:
+                break
+        
+        # Second pass: if no name column found, look for any text column that might contain identifiers
+        if not name_column:
+            for col in df.columns:
+                if df[col].dtype == 'object':  # Text columns
+                    # Check if this column contains unique text values (likely names)
+                    unique_ratio = df[col].nunique() / len(df)
+                    if unique_ratio > 0.5:  # More than 50% unique values
+                        name_column = col
+                        break
+        
+        # Third pass: if still no name column, pick the first text column that's not the location column
+        if not name_column:
+            for col in df.columns:
+                if df[col].dtype == 'object' and col != location_column:
+                    name_column = col
+                    break
+        
+        if not name_column:
+            return None
+        
+        # Filter data and extract names
+        try:
+            filtered_df = df[df[location_column].str.lower() == location_value.lower()]
+            if filtered_df.empty:
+                return f"❌ No records found for '{location_value}' in {location_column}"
+            
+            names = filtered_df[name_column].unique()
+            if len(names) == 0:
+                return f"❌ No {name_column} found for '{location_value}'"
+            
+            result = f"The names of {name_column} in {location_column} '{location_value}' are:\n"
+            for i, name in enumerate(names, 1):
+                result += f"{i}. {name}\n"
+            
+            
+            return f"🤖 **RTGS AI Analysis**: {result}"
+            
+        except Exception as e:
+            return f"❌ Error extracting data: {str(e)}"
+    
+    def _extract_location_by_metric(self, question: str, df: pd.DataFrame) -> str:
+        """Extract location with highest/lowest metric - DYNAMIC."""
+        question_lower = question.lower()
+        
+        # Find metric column
+        metric_column = None
+        for col in df.columns:
+            if col.lower() in question_lower:
+                metric_column = col
+                break
+        
+        if not metric_column:
+            return None
+        
+        # Find location column - COMPLETELY DYNAMIC
+        location_column = None
+        location_keywords = ['district', 'location', 'place', 'city', 'town', 'village', 'area', 'region', 'mandal', 'taluk', 'block']
+        
+        for keyword in location_keywords:
+            for col in df.columns:
+                if keyword in col.lower():
+                    location_column = col
+                    break
+            if location_column:
+                break
+        
+        if not location_column:
+            return None
+        
+        try:
+            # Calculate metric by location
+            metric_by_location = df.groupby(location_column)[metric_column].sum().sort_values(ascending=False)
+            
+            if 'highest' in question_lower or 'most' in question_lower:
+                top_location = metric_by_location.index[0]
+                top_value = metric_by_location.iloc[0]
+                return f"🤖 **RTGS AI Analysis**: {location_column} '{top_location}' has the highest {metric_column} with {top_value:,.2f}"
+            elif 'lowest' in question_lower or 'least' in question_lower:
+                bottom_location = metric_by_location.index[-1]
+                bottom_value = metric_by_location.iloc[-1]
+                return f"🤖 **RTGS AI Analysis**: {location_column} '{bottom_location}' has the lowest {metric_column} with {bottom_value:,.2f}"
+            
+        except Exception as e:
+            return f"❌ Error calculating metric: {str(e)}"
+        
+        return None
+    
+    def _extract_metric_value(self, question: str, df: pd.DataFrame) -> str:
+        """Extract specific metric values - DYNAMIC."""
+        question_lower = question.lower()
+        
+        # Find metric column
+        metric_column = None
+        for col in df.columns:
+            if col.lower() in question_lower:
+                metric_column = col
+                break
+        
+        if not metric_column:
+            return None
+        
+        try:
+            if 'total' in question_lower:
+                total = df[metric_column].sum()
+                return f"🤖 **RTGS AI Analysis**: Total {metric_column}: {total:,.2f}"
+            elif 'average' in question_lower or 'mean' in question_lower:
+                avg = df[metric_column].mean()
+                return f"🤖 **RTGS AI Analysis**: Average {metric_column}: {avg:,.2f}"
+            elif 'maximum' in question_lower or 'max' in question_lower:
+                max_val = df[metric_column].max()
+                return f"🤖 **RTGS AI Analysis**: Maximum {metric_column}: {max_val:,.2f}"
+            elif 'minimum' in question_lower or 'min' in question_lower:
+                min_val = df[metric_column].min()
+                return f"🤖 **RTGS AI Analysis**: Minimum {metric_column}: {min_val:,.2f}"
+            
+        except Exception as e:
+            return f"❌ Error calculating metric: {str(e)}"
+        
+        return None
+    
+    def _extract_top_bottom_items(self, question: str, df: pd.DataFrame) -> str:
+        """Extract top/bottom items - DYNAMIC."""
+        question_lower = question.lower()
+        
+        # Find metric column
+        metric_column = None
+        for col in df.columns:
+            if col.lower() in question_lower:
+                metric_column = col
+                break
+        
+        if not metric_column:
+            return None
+        
+        # Find item column - COMPLETELY DYNAMIC
+        item_column = None
+        item_keywords = ['name', 'place', 'location', 'title', 'company', 'business', 'firm', 'entity', 'organization', 'institution']
+        
+        for keyword in item_keywords:
+            for col in df.columns:
+                if keyword in col.lower():
+                    item_column = col
+                    break
+            if item_column:
+                break
+        
+        if not item_column:
+            return None
+        
+        try:
+            # Get number of items to show
+            n = 5  # default
+            for word in question_lower.split():
+                if word.isdigit():
+                    n = int(word)
+                    break
+            
+            if 'top' in question_lower or 'highest' in question_lower:
+                top_items = df.groupby(item_column)[metric_column].sum().sort_values(ascending=False).head(n)
+                result = f"🏆 **Top {n} {item_column} by {metric_column}**:\n"
+                for i, (item, value) in enumerate(top_items.items(), 1):
+                    medal = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "🏅"
+                    result += f"{medal} {item}: {value:,.2f}\n"
+                return f"🤖 **RTGS AI Analysis**: {result}"
+            
+            elif 'bottom' in question_lower or 'lowest' in question_lower:
+                bottom_items = df.groupby(item_column)[metric_column].sum().sort_values(ascending=True).head(n)
+                result = f"📉 **Bottom {n} {item_column} by {metric_column}**:\n"
+                for i, (item, value) in enumerate(bottom_items.items(), 1):
+                    result += f"{i}. {item}: {value:,.2f}\n"
+                return f"🤖 **RTGS AI Analysis**: {result}"
+            
+        except Exception as e:
+            return f"❌ Error extracting top/bottom items: {str(e)}"
+        
+        return None
     
     def _answer_with_ollama(self, question: str, analysis: Dict[str, Any], df: pd.DataFrame) -> str:
         """Answer complex questions using Ollama LLM - 100% data-driven."""

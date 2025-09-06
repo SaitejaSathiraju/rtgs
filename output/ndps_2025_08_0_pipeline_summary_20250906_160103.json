@@ -1,0 +1,39 @@
+{
+  "dataset_name": "ndps_2025_08_0",
+  "timestamp": "20250906_160103",
+  "pipeline_steps": {
+    "raw_data": {
+      "records": 18,
+      "columns": 8,
+      "missing_values": 0,
+      "data_types": {
+        "licensetype": "object",
+        "licensename": "object",
+        "name_frim": "object",
+        "license_validity": "object",
+        "constitution_particulars": "object",
+        "mfg_districtname": "object",
+        "mfg_mandalname": "object",
+        "mfg_villagename": "object"
+      }
+    },
+    "cleaned_data": {
+      "records": 18,
+      "columns": 8,
+      "missing_values": 0,
+      "outliers_handled": "Yes"
+    },
+    "standardized_data": {
+      "records": 18,
+      "columns": 16,
+      "numeric_standardized": 0,
+      "categorical_encoded": 8
+    },
+    "transformed_data": {
+      "records": 18,
+      "columns": 43,
+      "derived_features": 27,
+      "aggregation_features": 27
+    }
+  }
+}

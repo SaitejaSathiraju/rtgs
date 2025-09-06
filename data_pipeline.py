@@ -155,23 +155,32 @@ class DataPipeline:
         missing_after = cleaned_df.isnull().sum().sum()
         self.console.print(f"✅ Missing values: {missing_before:,} → {missing_after:,}")
         
-        # 2. Handle outliers
-        self.console.print("🧹 Handling outliers...")
-        outliers_removed = 0
+        # 2. Handle outliers (CONSERVATIVE APPROACH - Only flag, don't modify)
+        self.console.print("🧹 Analyzing outliers...")
+        outliers_detected = 0
+        outlier_info = []
+        
         for col in numeric_cols:
             Q1 = cleaned_df[col].quantile(0.25)
             Q3 = cleaned_df[col].quantile(0.75)
             IQR = Q3 - Q1
-            lower_bound = Q1 - 1.5 * IQR
-            upper_bound = Q3 + 1.5 * IQR
+            
+            # Only flag extreme outliers (beyond 3*IQR) for review
+            lower_bound = Q1 - 3 * IQR
+            upper_bound = Q3 + 3 * IQR
             
             outliers = ((cleaned_df[col] < lower_bound) | (cleaned_df[col] > upper_bound)).sum()
             if outliers > 0:
-                # Cap outliers instead of removing
-                cleaned_df[col] = cleaned_df[col].clip(lower_bound, upper_bound)
-                outliers_removed += outliers
+                outliers_detected += outliers
+                outlier_info.append(f"{col}: {outliers} extreme outliers")
         
-        self.console.print(f"✅ Outliers handled: {outliers_removed:,} values capped")
+        if outliers_detected > 0:
+            self.console.print(f"⚠️ Extreme outliers detected: {outliers_detected:,} values flagged for review")
+            for info in outlier_info:
+                self.console.print(f"   - {info}")
+            self.console.print("✅ Data integrity preserved - no values modified")
+        else:
+            self.console.print("✅ No extreme outliers detected")
         
         # 3. Standardize text data
         self.console.print("🧹 Standardizing text data...")
