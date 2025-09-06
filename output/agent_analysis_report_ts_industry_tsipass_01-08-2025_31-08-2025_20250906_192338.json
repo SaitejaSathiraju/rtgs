@@ -1,0 +1,105 @@
+{
+  "dataset_info": {
+    "file_name": "ts_industry_tsipass_01-08-2025_31-08-2025",
+    "records": 163,
+    "columns": [
+      "district_name",
+      "mandal_name",
+      "village_name",
+      "name_of_the_unit",
+      "line_of_activity",
+      "sector",
+      "investment",
+      "number_of_employees",
+      "application_date",
+      "approval_date",
+      "progress_of_implementation",
+      "is_online",
+      "social_status"
+    ],
+    "data_types": {
+      "district_name": "object",
+      "mandal_name": "object",
+      "village_name": "object",
+      "name_of_the_unit": "object",
+      "line_of_activity": "object",
+      "sector": "object",
+      "investment": "float64",
+      "number_of_employees": "int64",
+      "application_date": "object",
+      "approval_date": "object",
+      "progress_of_implementation": "object",
+      "is_online": "object",
+      "social_status": "object"
+    }
+  },
+  "agent_analysis": {
+    "timestamp": "2025-09-06T19:23:38.917764",
+    "agents_used": [
+      "Coordinator",
+      "DataCleaner",
+      "DataTransformer",
+      "DataAnalyst",
+      "DataSummarizer"
+    ],
+    "analysis_result": "The transformed dataset file path is C:\\Users\\User1\\Desktop\\rtgs -v3\\data\\ts_industry_tsipass_01-08-2025_31-08-2025_transformed.csv.\n\nThis final answer is based on the comprehensive transformation of the provided dataset, which includes data cleaning, feature engineering, categorical encoding, date parsing, and data normalization. The transformed dataset file path has been finalized to ensure that it meets the required standards for analysis and reporting.\n\nThe transformation report provides a detailed overview of the transformations applied to the dataset, including specific transformations applied, new features created, data structure changes made, and recommendations for further transformations. Quality assurance measures have also been implemented to ensure the accuracy and relevance of the transformed dataset.\n\nBy leveraging a tailored task delegation strategy, quality assurance measures, and integration approach, we have ensured comprehensive insights and actionable recommendations for future analysis workflows. The final answer is based on the comprehensive transformation of the provided dataset, which has been finalized to meet the required standards for analysis and reporting.",
+    "status": "completed"
+  },
+  "insights": {
+    "data_quality": {
+      "missing_values": {
+        "district_name": 0,
+        "mandal_name": 0,
+        "village_name": 0,
+        "name_of_the_unit": 0,
+        "line_of_activity": 0,
+        "sector": 0,
+        "investment": 0,
+        "number_of_employees": 0,
+        "application_date": 0,
+        "approval_date": 0,
+        "progress_of_implementation": 0,
+        "is_online": 0,
+        "social_status": 0
+      },
+      "duplicate_rows": "0",
+      "data_types": {
+        "district_name": "object",
+        "mandal_name": "object",
+        "village_name": "object",
+        "name_of_the_unit": "object",
+        "line_of_activity": "object",
+        "sector": "object",
+        "investment": "float64",
+        "number_of_employees": "int64",
+        "application_date": "object",
+        "approval_date": "object",
+        "progress_of_implementation": "object",
+        "is_online": "object",
+        "social_status": "object"
+      },
+      "memory_usage": "122748"
+    },
+    "statistical_summary": {
+      "investment": {
+        "mean": 3.5859472392638048,
+        "median": 0.8,
+        "std": 12.790582211998421,
+        "min": 0.025,
+        "max": 136.0,
+        "count": 163
+      },
+      "number_of_employees": {
+        "mean": 18.957055214723926,
+        "median": 10.0,
+        "std": 46.227610488988326,
+        "min": 1.0,
+        "max": 425.0,
+        "count": 163
+      }
+    },
+    "recommendations": [
+      "Consider normalization for numeric columns: investment, number_of_employees"
+    ]
+  }
+}

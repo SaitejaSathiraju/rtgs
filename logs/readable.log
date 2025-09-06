@@ -47,3 +47,52 @@
 2025-09-06 19:04:50,058 - RTGSAnalyst - INFO - ✅ [bold green]Agent Analysis[/bold green]: Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
 2025-09-06 19:04:50 - SUCCESS: Agent Analysis - Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
 2025-09-06 19:04:50 - SESSION_SUMMARY: {'duration': 'Complete', 'datasets': 0, 'questions': 'Unlimited', 'charts': 'Generated for all', 'errors': 0}
+2025-09-06 19:23:08,684 - RTGSAnalyst - INFO - 🚀 [bold green]Simple Auto-Discovery[/bold green]: Initialized and ready
+2025-09-06 19:23:08 - SUCCESS: Simple Auto-Discovery - Initialized and ready
+2025-09-06 19:23:08,686 - RTGSAnalyst - INFO - 🚀 [bold blue]ULTIMATE PROCESSING[/bold blue]: Processing ALL datasets
+2025-09-06 19:23:08 - STAGE: ULTIMATE PROCESSING - Processing ALL datasets
+2025-09-06 19:23:08,687 - RTGSAnalyst - INFO - 🔍 [bold blue]PROCESSING ALL DATASETS[/bold blue]: Complete auto-discovery
+2025-09-06 19:23:08 - STAGE: PROCESSING ALL DATASETS - Complete auto-discovery
+2025-09-06 19:23:08,688 - RTGSAnalyst - INFO - 📁 [bold green]Datasets Found[/bold green]: 1 files detected
+2025-09-06 19:23:08 - EVENT: Datasets Found - 1 files detected
+2025-09-06 19:23:08,696 - RTGSAnalyst - INFO - 🚀 [bold blue]COMPLETE DATASET PROCESSING[/bold blue]: File: ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:23:08 - STAGE: COMPLETE DATASET PROCESSING - File: ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:23:09,605 - RTGSAnalyst - ERROR - ❌ [bold red]Processing Error[/bold red]: _suppress_pydantic_deprecation_warnings.<locals>.filtered_warn() got an unexpected keyword argument 'skip_file_prefixes'
+2025-09-06 19:23:09 - ERROR: Processing Error - _suppress_pydantic_deprecation_warnings.<locals>.filtered_warn() got an unexpected keyword argument 'skip_file_prefixes'
+2025-09-06 19:23:09,606 - RTGSAnalyst - INFO - 🎉 [bold green]All Datasets Processed[/bold green]: 0/1 datasets ready
+2025-09-06 19:23:09 - SUCCESS: All Datasets Processed - 0/1 datasets ready
+2025-09-06 19:23:09,607 - RTGSAnalyst - INFO - 📊 [bold blue]TERMINAL CHARTS[/bold blue]: Generating terminal charts for all datasets
+2025-09-06 19:23:09 - STAGE: TERMINAL CHARTS - Generating terminal charts for all datasets
+2025-09-06 19:23:09,623 - RTGSAnalyst - INFO - 📋 [bold blue]EXECUTIVE SUMMARIES[/bold blue]: Generating executive summaries for all datasets
+2025-09-06 19:23:09 - STAGE: EXECUTIVE SUMMARIES - Generating executive summaries for all datasets
+2025-09-06 19:23:09,634 - RTGSAnalyst - INFO - 🤖 [bold blue]AGENT ANALYSIS[/bold blue]: Running agent analysis for all datasets
+2025-09-06 19:23:09 - STAGE: AGENT ANALYSIS - Running agent analysis for all datasets
+2025-09-06 19:23:10,928 - RTGSAnalyst - INFO - 🤖 [bold blue]AGENT ANALYSIS[/bold blue]: Starting agent-based analysis for C:\Users\User1\Desktop\rtgs -v3\data\ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:23:10 - STAGE: AGENT ANALYSIS - Starting agent-based analysis for C:\Users\User1\Desktop\rtgs -v3\data\ts_industry_tsipass_01-08-2025_31-08-2025.csv
+2025-09-06 19:23:10,931 - RTGSAnalyst - INFO - 📊 [bold green]Dataset Loaded[/bold green]: 163 records, 13 columns
+2025-09-06 19:23:10 - EVENT: Dataset Loaded - 163 records, 13 columns
+2025-09-06 19:23:10,931 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Coordination Task assigned to Coordinator
+2025-09-06 19:23:10 - EVENT: 📋 Task Started - Coordination Task assigned to Coordinator
+2025-09-06 19:23:10,932 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Cleaning Task assigned to DataCleaner
+2025-09-06 19:23:10 - EVENT: 📋 Task Started - Data Cleaning Task assigned to DataCleaner
+2025-09-06 19:23:10,933 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Transformation Task assigned to DataTransformer
+2025-09-06 19:23:10 - EVENT: 📋 Task Started - Data Transformation Task assigned to DataTransformer
+2025-09-06 19:23:10,934 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Analysis Task assigned to DataAnalyst
+2025-09-06 19:23:10 - EVENT: 📋 Task Started - Data Analysis Task assigned to DataAnalyst
+2025-09-06 19:23:10,935 - RTGSAnalyst - INFO - 📝 [bold green]📋 Task Started[/bold green]: Data Summarization Task assigned to DataSummarizer
+2025-09-06 19:23:10 - EVENT: 📋 Task Started - Data Summarization Task assigned to DataSummarizer
+2025-09-06 19:23:10,939 - RTGSAnalyst - INFO - 🚀 [bold green]Agent Crew Created[/bold green]: 5 agents ready for analysis
+2025-09-06 19:23:10 - EVENT: Agent Crew Created - 5 agents ready for analysis
+2025-09-06 19:23:10,940 - RTGSAnalyst - INFO - 🎯 [bold green]🚀 Crew Started[/bold green]: RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
+2025-09-06 19:23:10 - EVENT: 🚀 Crew Started - RTGS Analysis Crew with 5 agents (Coordinator, DataCleaner, DataTransformer, DataAnalyst, DataSummarizer) - 5 tasks
+2025-09-06 19:23:10,942 - RTGSAnalyst - INFO - 🔄 [bold green]⚙️ Process Started[/bold green]: Agent Analysis: Processing ts_industry_tsipass_01-08-2025_31-08-2025 with 5 agents
+2025-09-06 19:23:10 - EVENT: ⚙️ Process Started - Agent Analysis: Processing ts_industry_tsipass_01-08-2025_31-08-2025 with 5 agents
+2025-09-06 19:23:38,915 - RTGSAnalyst - INFO - ✅ [bold green]Process Complete[/bold green]: Agent Analysis: Completed analysis for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:23:38 - SUCCESS: Process Complete - Agent Analysis: Completed analysis for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:23:38,916 - RTGSAnalyst - INFO - ✅ [bold green]Crew Complete[/bold green]: RTGS Analysis Crew: Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:23:38 - SUCCESS: Crew Complete - RTGS Analysis Crew: Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:23:38,920 - RTGSAnalyst - INFO - 📄 [bold green]Report Saved[/bold green]: Agent analysis report saved: agent_analysis_report_ts_industry_tsipass_01-08-2025_31-08-2025_20250906_192338.json
+2025-09-06 19:23:38 - EVENT: Report Saved - Agent analysis report saved: agent_analysis_report_ts_industry_tsipass_01-08-2025_31-08-2025_20250906_192338.json
+2025-09-06 19:23:38,921 - RTGSAnalyst - INFO - ✅ [bold green]Agent Analysis[/bold green]: Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:23:38 - SUCCESS: Agent Analysis - Analysis complete for ts_industry_tsipass_01-08-2025_31-08-2025
+2025-09-06 19:23:38 - SESSION_SUMMARY: {'duration': 'Complete', 'datasets': 0, 'questions': 'Unlimited', 'charts': 'Generated for all', 'errors': 0}
