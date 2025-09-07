@@ -1646,16 +1646,8 @@ def ultimate():
         log_stage("ULTIMATE PROCESSING", "Processing ALL datasets", "🚀")
         auto_discovery.process_all_datasets()
         
-        # Generate terminal charts for all datasets
-        log_stage("TERMINAL CHARTS", "Generating terminal charts for all datasets", "📊")
+        # Get all data files for processing
         data_files = list(Path(DATA_DIR).glob("*.csv"))
-        for file_path in data_files:
-            try:
-                console.print(f"\n[bold blue]📊 Generating Terminal Charts for {file_path.name}[/bold blue]")
-                _generate_terminal_charts(pd.read_csv(file_path), file_path.stem)
-            except Exception as e:
-                log_error("Terminal Charts Error", f"Failed for {file_path.name}: {str(e)}")
-                console.print(f"[yellow]⚠️ Skipped terminal charts for {file_path.name}[/yellow]")
         
         # Generate executive summaries for all datasets
         log_stage("EXECUTIVE SUMMARIES", "Generating executive summaries for all datasets", "📋")
@@ -1725,6 +1717,16 @@ def ultimate():
             except Exception as e:
                 log_error("REAL Agent Analysis Error", f"Failed for {file_path.name}: {str(e)}")
                 console.print(f"[yellow]⚠️ Skipped REAL agent analysis for {file_path.name}[/yellow]")
+        
+        # Generate terminal charts for all datasets (MOVED TO END)
+        log_stage("TERMINAL CHARTS", "Generating terminal charts for all datasets", "📊")
+        for file_path in data_files:
+            try:
+                console.print(f"\n[bold blue]📊 Generating Terminal Charts for {file_path.name}[/bold blue]")
+                _generate_terminal_charts(pd.read_csv(file_path), file_path.stem)
+            except Exception as e:
+                log_error("Terminal Charts Error", f"Failed for {file_path.name}: {str(e)}")
+                console.print(f"[yellow]⚠️ Skipped terminal charts for {file_path.name}[/yellow]")
         
         # Show comprehensive status
         console.print(f"\n[bold green]📊 COMPREHENSIVE STATUS REPORT[/bold green]")

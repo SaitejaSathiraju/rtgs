@@ -27,31 +27,35 @@ class DataTransformerAgent(BaseAgent):
             description=f"""
             You are a Data Transformation Specialist. Your task is to transform and restructure the dataset at {dataset_path}.
             
-            IMPORTANT: You must use the available tools to perform REAL data transformation operations, not just generate text.
+            IMPORTANT: You have access to ONLY these 3 tools:
+            1. read_dataset - to read and understand the dataset
+            2. analyze_data_quality - to assess data quality issues  
+            3. clean_dataset - to clean the dataset if needed
             
-            Follow these steps using the tools:
+            Follow these steps using ONLY the available tools:
             
-            1. FIRST, use the read_dataset tool to understand the dataset structure:
-               read_dataset(file_path="{dataset_path}")
+            1. FIRST, use read_dataset to understand the dataset structure:
+               Action: read_dataset
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            2. THEN, use the analyze_statistics tool to understand the data patterns:
-               analyze_statistics_tool(file_path="{dataset_path}")
+            2. THEN, use analyze_data_quality to understand the data patterns:
+               Action: analyze_data_quality
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            3. NEXT, use the transform_dataset tool to actually transform the data:
-               transform_dataset_tool(file_path="{dataset_path}")
+            3. FINALLY, provide a comprehensive final answer summarizing:
+               - Summary of the original dataset structure
+               - Data quality assessment
+               - Transformation recommendations
+               - New features that could be created
+               - Optimal data structure for analysis
             
-            4. OPTIONALLY, create visualizations to show the transformation effects:
-               create_visualization_tool(file_path="{dataset_path}", chart_type="distribution")
+            CRITICAL: After completing the analysis, you MUST provide a Final Answer in this format:
+            ```
+            Thought: I now know the final answer
+            Final Answer: [Your comprehensive transformation report here]
+            ```
             
-            Your output should include:
-            - Summary of the original dataset structure
-            - Statistical analysis of the data
-            - Transformation operations performed
-            - New features created
-            - Path to the transformed dataset file
-            - Visualization files created (if any)
-            
-            Make sure to use the tools to perform actual data operations, not just describe what you would do.
+            Do not keep repeating the same tool calls. Complete the analysis and provide the final answer.
             """,
             agent=self.agent,
             expected_output="Comprehensive transformation report with actual transformed dataset file path and detailed transformation operations performed"

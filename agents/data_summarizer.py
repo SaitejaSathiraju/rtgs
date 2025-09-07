@@ -25,35 +25,36 @@ class DataSummarizerAgent(BaseAgent):
             description=f"""
             You are an Executive Summary Specialist. Your task is to create a clear, actionable summary of the analysis for the dataset at {dataset_path}.
             
-            IMPORTANT: You must use the available tools to perform REAL analysis operations, not just generate text.
+            IMPORTANT: You have access to ONLY these 3 tools:
+            1. read_dataset - to read and understand the dataset
+            2. analyze_data_quality - to assess data quality issues  
+            3. clean_dataset - to clean the dataset if needed
             
-            Follow these steps using the tools:
+            Follow these steps using ONLY the available tools:
             
-            1. FIRST, use the read_dataset tool to understand the dataset:
-               read_dataset(file_path="{dataset_path}")
+            1. FIRST, use read_dataset to understand the dataset:
+               Action: read_dataset
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            2. THEN, use the analyze_statistics tool to get key findings:
-               analyze_statistics_tool(file_path="{dataset_path}")
+            2. THEN, use analyze_data_quality to get key findings:
+               Action: analyze_data_quality
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            3. NEXT, use the generate_insights tool to extract actionable insights:
-               generate_insights_tool(file_path="{dataset_path}")
+            3. FINALLY, provide a comprehensive final answer summarizing:
+               - Executive overview of key findings
+               - Critical insights and patterns
+               - Policy recommendations
+               - Implementation roadmap
+               - Risk assessment
+               - Success metrics
             
-            4. OPTIONALLY, create visualizations to support your summary:
-               create_visualization_tool(file_path="{dataset_path}", chart_type="auto")
+            CRITICAL: After completing the analysis, you MUST provide a Final Answer in this format:
+            ```
+            Thought: I now know the final answer
+            Final Answer: [Your comprehensive executive summary here]
+            ```
             
-            5. FINALLY, save your executive summary:
-               save_analysis_report_tool(analysis_content="[your executive summary]", dataset_name="[dataset_name]")
-            
-            Your executive summary should include:
-            - Executive overview of key findings
-            - Critical insights and patterns
-            - Policy recommendations
-            - Implementation roadmap
-            - Risk assessment
-            - Success metrics
-            - Path to saved summary report
-            
-            Make sure to use the tools to perform actual data operations, not just describe what you would do.
+            Do not keep repeating the same tool calls. Complete the analysis and provide the final answer.
             """,
             agent=self.agent,
             expected_output="Executive summary with key findings, specific recommendations, and actionable insights based on actual dataset analysis"

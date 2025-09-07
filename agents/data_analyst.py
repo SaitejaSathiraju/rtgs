@@ -28,38 +28,35 @@ class DataAnalystAgent(BaseAgent):
             description=f"""
             You are a Senior Data Analyst. Your task is to perform comprehensive statistical and analytical analysis of the dataset at {dataset_path}.
             
-            IMPORTANT: You must use the available tools to perform REAL data analysis operations, not just generate text.
+            IMPORTANT: You have access to ONLY these 3 tools:
+            1. read_dataset - to read and understand the dataset
+            2. analyze_data_quality - to assess data quality issues  
+            3. clean_dataset - to clean the dataset if needed
             
-            Follow these steps using the tools:
+            Follow these steps using ONLY the available tools:
             
-            1. FIRST, use the read_dataset tool to understand the dataset:
-               read_dataset(file_path="{dataset_path}")
+            1. FIRST, use read_dataset to understand the dataset:
+               Action: read_dataset
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            2. THEN, use the analyze_data_quality tool to assess data quality:
-               analyze_data_quality_tool(file_path="{dataset_path}")
+            2. THEN, use analyze_data_quality to assess data quality:
+               Action: analyze_data_quality
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            3. NEXT, use the analyze_statistics tool to perform statistical analysis:
-               analyze_statistics_tool(file_path="{dataset_path}")
+            3. FINALLY, provide a comprehensive final answer summarizing:
+               - Dataset overview and structure
+               - Data quality assessment
+               - Statistical findings and patterns
+               - Actionable insights and recommendations
+               - Policy implications
             
-            4. THEN, use the generate_insights tool to extract actionable insights:
-               generate_insights_tool(file_path="{dataset_path}")
+            CRITICAL: After completing the analysis, you MUST provide a Final Answer in this format:
+            ```
+            Thought: I now know the final answer
+            Final Answer: [Your comprehensive analysis report here]
+            ```
             
-            5. OPTIONALLY, create visualizations to support your analysis:
-               create_visualization_tool(file_path="{dataset_path}", chart_type="auto")
-            
-            6. FINALLY, save your analysis report:
-               save_analysis_report_tool(analysis_content="[your analysis content]", dataset_name="[dataset_name]")
-            
-            Your output should include:
-            - Dataset overview and structure
-            - Data quality assessment
-            - Statistical findings and patterns
-            - Actionable insights and recommendations
-            - Policy implications
-            - Path to saved analysis report
-            - Visualization files created (if any)
-            
-            Make sure to use the tools to perform actual data operations, not just describe what you would do.
+            Do not keep repeating the same tool calls. Complete the analysis and provide the final answer.
             """,
             agent=self.agent,
             expected_output="Comprehensive analysis report with statistical findings, patterns, insights, and recommendations based on actual dataset analysis"

@@ -24,29 +24,39 @@ class DataCleanerAgent(BaseAgent):
             description=f"""
             You are a Data Quality Specialist. Your task is to clean and standardize the dataset at {dataset_path}.
             
-            IMPORTANT: You must use the available tools to perform REAL data cleaning operations, not just generate text.
+            IMPORTANT: You have access to ONLY these 3 tools:
+            1. read_dataset - to read and understand the dataset
+            2. analyze_data_quality - to assess data quality issues  
+            3. clean_dataset - to clean the dataset
             
-            Follow these steps using the tools:
+            Follow these steps using ONLY the available tools:
             
-            1. FIRST, use the read_dataset tool to understand the dataset:
-               read_dataset(file_path="{dataset_path}")
+            1. FIRST, use read_dataset to understand the dataset:
+               Action: read_dataset
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            2. THEN, use the analyze_data_quality tool to identify quality issues:
-               analyze_data_quality_tool(file_path="{dataset_path}")
+            2. THEN, use analyze_data_quality to identify quality issues:
+               Action: analyze_data_quality
+               Action Input: {{"file_path": "{dataset_path}"}}
             
-            3. NEXT, use the clean_dataset tool to actually clean the data:
-               clean_dataset_tool(file_path="{dataset_path}")
+            3. NEXT, use clean_dataset to clean the data (use null for output_path to auto-generate filename):
+               Action: clean_dataset
+               Action Input: {{"file_path": "{dataset_path}", "output_path": null}}
             
-            4. FINALLY, verify the cleaning by analyzing the cleaned dataset again.
+            4. FINALLY, provide a comprehensive final answer summarizing:
+               - Summary of the original dataset
+               - Data quality issues identified
+               - Cleaning operations performed
+               - Results of the cleaning process
+               - Path to the cleaned dataset file
             
-            Your output should include:
-            - Summary of the original dataset
-            - Data quality issues identified
-            - Cleaning operations performed
-            - Results of the cleaning process
-            - Path to the cleaned dataset file
+            CRITICAL: After completing the analysis, you MUST provide a Final Answer in this format:
+            ```
+            Thought: I now know the final answer
+            Final Answer: [Your comprehensive cleaning report here]
+            ```
             
-            Make sure to use the tools to perform actual data operations, not just describe what you would do.
+            Do not keep repeating the same tool calls. Complete the analysis and provide the final answer.
             """,
             agent=self.agent,
             expected_output="Comprehensive cleaning report with actual cleaned dataset file path and detailed cleaning operations performed"

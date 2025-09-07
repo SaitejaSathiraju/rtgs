@@ -1,3 +1,5 @@
+https://drive.google.com/file/d/1O7M-aXHVryzyus478arkMSJcMDDkkVJ1/view?usp=sharing
+
 # 🚀 RTGS - Real-Time Government System AI Analyst
 
 A comprehensive CLI-first AI analyst for Telangana Open Data, powered by Ollama and CrewAI agents.
@@ -27,6 +29,7 @@ Each agent operates autonomously, thinking through problems and taking appropria
 - **📈 Rich Visualizations**: Terminal charts and generated plot files
 - **🎯 Auto-Discovery**: Automatically processes new datasets in `/data` folder
 - **📝 Comprehensive Logging**: Detailed agent and process tracking
+- **🔬 Hypothesis Testing**: Statistical analysis with policy recommendations and actionable insights
 
 ## 🚀 Quick Start
 
@@ -138,6 +141,28 @@ py cli_analyst.py terminal-charts "data/your_dataset.csv"
 - **Purpose**: ASCII charts in terminal
 - **Features**: Bar charts, histograms, correlation matrices
 
+### 🔬 Hypothesis Testing Commands
+
+#### **Statistical Analysis with Policy Recommendations**
+```bash
+py cli_analyst.py hypothesis "Is there a significant difference in tourism between districts?"
+py cli_analyst.py hypothesis "Do rainfall patterns affect tourism revenue?"
+py cli_analyst.py hypothesis "Are there seasonal trends in visitor numbers?"
+```
+
+#### **Hypothesis Testing with Specific Dataset**
+```bash
+py cli_analyst.py hypothesis "Which factors most influence visitor satisfaction?" --dataset "Tourism Foreign Visitors Data 2024"
+py cli_analyst.py hypothesis "Is there correlation between location and visitor count?" --dataset "Tourism Foreign Visitors Data 2024"
+```
+
+**Features:**
+- **📊 Statistical Tests**: T-tests, correlation analysis, ANOVA, chi-square tests
+- **🎯 Policy Recommendations**: Actionable insights and suggestions based on findings
+- **📈 Trend Analysis**: Seasonal patterns, growth trends, and forecasting
+- **🔍 Simple Checks**: Easy-to-understand statistical validation
+- **💡 Actionable Insights**: Clear recommendations for decision-making
+
 ### 🔧 Utility Commands
 
 #### **List Datasets**
@@ -206,6 +231,9 @@ py cli_analyst.py agent-analyze "data/Tourism Foreign Visitors Data 2024.csv"
 
 # 4. RAG analysis
 py cli_analyst.py rag "What are the key insights from all datasets?"
+
+# 5. Hypothesis testing with policy recommendations
+py cli_analyst.py hypothesis "Is there a significant correlation between location and visitor count?"
 ```
 
 ### **Dataset-Specific Analysis**
@@ -218,6 +246,9 @@ py cli_analyst.py ask "Which place has most visitors?" --dataset "Tourism Foreig
 
 # RAG analysis on specific dataset
 py cli_analyst.py rag "Analyze tourism trends" --dataset "Tourism Foreign Visitors Data 2024"
+
+# Hypothesis testing on specific dataset
+py cli_analyst.py hypothesis "Do foreign visitors prefer certain locations?" --dataset "Tourism Foreign Visitors Data 2024"
 ```
 
 ### **Data Pipeline**
@@ -280,8 +311,9 @@ The application name is set to "RTGS" (Real-Time Government System) in `config.p
 2. **Use Dataset Flag**: For specific questions, use `--dataset` flag to target specific datasets
 3. **Agent Analysis**: Use `agent-analyze` for comprehensive analysis with detailed logging
 4. **RAG Insights**: Use `rag` command for context-aware analysis across all datasets
-5. **Check Outputs**: Use `show-outputs` to see all generated files and charts
-6. **Auto-Discovery**: Just add new datasets to `/data` folder and run `ultimate` to process them
+5. **Hypothesis Testing**: Use `hypothesis` command for statistical analysis and policy recommendations
+6. **Check Outputs**: Use `show-outputs` to see all generated files and charts
+7. **Auto-Discovery**: Just add new datasets to `/data` folder and run `ultimate` to process them
 
 ## 🎯 Available Datasets
 
