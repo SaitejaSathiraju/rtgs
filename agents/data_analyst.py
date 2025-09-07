@@ -26,64 +26,40 @@ class DataAnalystAgent(BaseAgent):
         """Create a data analysis task."""
         return Task(
             description=f"""
-            CRITICAL: You must FIRST use the analyze_dataset tool to read and analyze the actual dataset at {dataset_path} to understand its specific structure, columns, data types, and content.
+            You are a Senior Data Analyst. Your task is to perform comprehensive statistical and analytical analysis of the dataset at {dataset_path}.
             
-            Use this command: analyze_dataset(file_path="{dataset_path}")
+            IMPORTANT: You must use the available tools to perform REAL data analysis operations, not just generate text.
             
-            After analyzing the ACTUAL dataset, perform comprehensive analysis that is COMPLETELY DYNAMIC and adaptive:
+            Follow these steps using the tools:
             
-            1. Statistical Analysis (100% data-driven):
-               - Use the analyze_dataset tool to get detailed statistics: {dataset_path}
-               - Calculate measures of central tendency for ALL numeric columns found
-               - Analyze distributions and identify patterns in the ACTUAL data
-               - Perform correlation analysis between ALL numeric variables
-               - Identify outliers and anomalies in the ACTUAL data
-               - Calculate confidence intervals and statistical significance
+            1. FIRST, use the read_dataset tool to understand the dataset:
+               read_dataset(file_path="{dataset_path}")
             
-            2. Pattern Recognition (completely adaptive):
-               - Identify trends in the actual data over time (if temporal data exists)
-               - Find seasonal patterns or cyclical behavior in the ACTUAL data
-               - Detect clusters or groupings in the ACTUAL data
-               - Identify relationships between different variables in the ACTUAL data
-               - Find unusual patterns or anomalies in the ACTUAL data
+            2. THEN, use the analyze_data_quality tool to assess data quality:
+               analyze_data_quality_tool(file_path="{dataset_path}")
             
-            3. Dynamic Analysis (based on actual content):
-               - Analyze geographic patterns if location data exists
-               - Perform demographic analysis if population data exists
-               - Analyze economic indicators if financial data exists
-               - Perform performance analysis if metrics data exists
-               - Analyze policy impact if policy-related data exists
-               - Adapt analysis to whatever domain the data represents
+            3. NEXT, use the analyze_statistics tool to perform statistical analysis:
+               analyze_statistics_tool(file_path="{dataset_path}")
             
-            4. Comparative Analysis (tailored to the dataset):
-               - Compare different categories or groups in the ACTUAL data
-               - Analyze performance across different regions/time periods
-               - Identify best and worst performers in the ACTUAL data
-               - Calculate growth rates and changes over time
-               - Perform benchmarking analysis
+            4. THEN, use the generate_insights tool to extract actionable insights:
+               generate_insights_tool(file_path="{dataset_path}")
             
-            5. Predictive Insights (based on actual patterns):
-               - Identify factors that influence key outcomes in the ACTUAL data
-               - Suggest predictive models based on the ACTUAL data
-               - Identify leading indicators in the ACTUAL dataset
-               - Recommend forecasting approaches
+            5. OPTIONALLY, create visualizations to support your analysis:
+               create_visualization_tool(file_path="{dataset_path}", chart_type="auto")
             
-            6. Generate comprehensive analysis report with REAL DATA ONLY:
-               - Key statistical findings from the actual data
-               - Important patterns and trends identified in the ACTUAL data
-               - Significant correlations and relationships found
-               - Anomalies and outliers found in the ACTUAL data
-               - Actionable insights and recommendations based on ACTUAL findings
-               - Policy implications based on the ACTUAL analysis
+            6. FINALLY, save your analysis report:
+               save_analysis_report_tool(analysis_content="[your analysis content]", dataset_name="[dataset_name]")
             
-            CRITICAL REQUIREMENTS:
-            - Use ONLY the actual data insights from the analyze_dataset tool
-            - Do NOT use placeholder text or predefined templates
-            - Do NOT make assumptions about the data structure
-            - Adapt completely to whatever dataset structure is found
-            - Provide specific insights with real numbers from the data
+            Your output should include:
+            - Dataset overview and structure
+            - Data quality assessment
+            - Statistical findings and patterns
+            - Actionable insights and recommendations
+            - Policy implications
+            - Path to saved analysis report
+            - Visualization files created (if any)
             
-            Return comprehensive analysis report with statistical findings, patterns, insights, and recommendations based on actual dataset analysis.
+            Make sure to use the tools to perform actual data operations, not just describe what you would do.
             """,
             agent=self.agent,
             expected_output="Comprehensive analysis report with statistical findings, patterns, insights, and recommendations based on actual dataset analysis"

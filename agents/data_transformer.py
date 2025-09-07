@@ -25,59 +25,36 @@ class DataTransformerAgent(BaseAgent):
         """Create a data transformation task."""
         return Task(
             description=f"""
-            CRITICAL: You must FIRST use the analyze_dataset tool to read and analyze the actual dataset at {dataset_path} to understand its specific structure, columns, data types, and content.
+            You are a Data Transformation Specialist. Your task is to transform and restructure the dataset at {dataset_path}.
             
-            Use this command: analyze_dataset(file_path="{dataset_path}")
+            IMPORTANT: You must use the available tools to perform REAL data transformation operations, not just generate text.
             
-            After reading the dataset, transform and restructure it based on the ACTUAL data (completely dynamic):
+            Follow these steps using the tools:
             
-            1. Data Structure Analysis (100% data-driven):
-               - Read the dataset and identify the specific columns: {dataset_path}
-               - Analyze data types and identify transformation opportunities
-               - Identify categorical variables that need encoding
-               - Find numeric variables that need normalization/scaling
-               - Identify date/time columns that need parsing
-               - Check for hierarchical or nested data structures
+            1. FIRST, use the read_dataset tool to understand the dataset structure:
+               read_dataset(file_path="{dataset_path}")
             
-            2. Feature Engineering (completely adaptive):
-               - Create derived features based on the actual data patterns
-               - Generate aggregations relevant to the specific domain found
-               - Create categorical encodings for the actual categorical variables
-               - Generate time-based features if date columns exist
-               - Create geographic features if location data exists
-               - Generate statistical features for numeric columns
+            2. THEN, use the analyze_statistics tool to understand the data patterns:
+               analyze_statistics_tool(file_path="{dataset_path}")
             
-            3. Data Restructuring (based on actual content):
-               - Reshape data if needed (wide to long, long to wide)
-               - Create pivot tables relevant to the domain
-               - Generate summary tables for the actual data
-               - Create hierarchical groupings if applicable
-               - Restructure for optimal analysis based on the data
+            3. NEXT, use the transform_dataset tool to actually transform the data:
+               transform_dataset_tool(file_path="{dataset_path}")
             
-            4. Data Normalization (tailored to the dataset):
-               - Apply appropriate scaling to numeric columns
-               - Normalize categorical variables
-               - Handle outliers in the actual data
-               - Apply domain-specific transformations
+            4. OPTIONALLY, create visualizations to show the transformation effects:
+               create_visualization_tool(file_path="{dataset_path}", chart_type="distribution")
             
-            5. Generate transformation report with REAL DATA:
-               - Specific transformations applied to this dataset
-               - New features created and their purposes
-               - Data structure changes made
-               - Recommendations for further transformations
-               - Use actual numbers and percentages from the data
+            Your output should include:
+            - Summary of the original dataset structure
+            - Statistical analysis of the data
+            - Transformation operations performed
+            - New features created
+            - Path to the transformed dataset file
+            - Visualization files created (if any)
             
-            CRITICAL REQUIREMENTS:
-            - Use ONLY the actual data insights from the analyze_dataset tool
-            - Do NOT use placeholder text or predefined templates
-            - Do NOT make assumptions about the data structure
-            - Adapt completely to whatever dataset structure is found
-            - Provide specific transformation recommendations with real numbers
-            
-            Return the transformed dataset file path and comprehensive transformation report based on actual dataset analysis.
+            Make sure to use the tools to perform actual data operations, not just describe what you would do.
             """,
             agent=self.agent,
-            expected_output="Transformed dataset file path and comprehensive transformation report based on actual dataset analysis"
+            expected_output="Comprehensive transformation report with actual transformed dataset file path and detailed transformation operations performed"
         )
     
     def think_and_act(self, task_description: str, context: Dict[str, Any] = None) -> str:

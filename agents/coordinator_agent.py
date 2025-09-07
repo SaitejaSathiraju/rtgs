@@ -26,49 +26,40 @@ class CoordinatorAgent(BaseAgent):
         """Create a coordination task for multi-agent analysis."""
         return Task(
             description=f"""
-            CRITICAL: You must FIRST use the analyze_dataset tool to read and analyze the actual dataset at {dataset_path} to understand its specific structure, columns, data types, and content.
+            You are an Analysis Coordinator and Task Delegator. Your task is to coordinate comprehensive multi-agent analysis of the dataset at {dataset_path}.
             
-            Use this command: analyze_dataset(file_path="{dataset_path}")
+            IMPORTANT: You must use the available tools to perform REAL analysis operations, not just generate text.
             
-            After reading the dataset, coordinate a comprehensive multi-agent analysis:
+            Follow these steps using the tools:
             
-            1. Dataset Assessment and Planning (based on actual dataset):
-               - Read the dataset and understand its structure: {dataset_path}
-               - Assess the dataset complexity and analysis requirements
-               - Determine which agents are needed for this specific dataset
-               - Create a detailed analysis plan based on the actual data
-               - Identify potential challenges and mitigation strategies
+            1. FIRST, use the read_dataset tool to understand the dataset:
+               read_dataset(file_path="{dataset_path}")
             
-            2. Task Delegation Strategy (tailored to this dataset):
-               - Delegate data cleaning to DataCleaner based on actual data quality issues
-               - Assign transformation tasks to DataTransformer based on actual data structure
-               - Coordinate analysis tasks with DataAnalyst based on actual data patterns
-               - Plan summarization with DataSummarizer based on expected insights
-               - Ensure proper sequencing and dependencies between tasks
+            2. THEN, use the analyze_data_quality tool to assess the dataset:
+               analyze_data_quality_tool(file_path="{dataset_path}")
             
-            3. Quality Assurance Coordination (based on actual content):
-               - Establish quality checkpoints for each agent's work
-               - Define validation criteria based on the dataset domain
-               - Plan cross-validation between agent outputs
-               - Ensure consistency across all agent analyses
-               - Monitor progress and adjust plans as needed
+            3. NEXT, use the analyze_statistics tool to understand data patterns:
+               analyze_statistics_tool(file_path="{dataset_path}")
             
-            4. Result Synthesis and Integration (tailored to the analysis):
-               - Collect and integrate outputs from all agents
-               - Resolve any conflicts or inconsistencies between agent findings
-               - Create a unified analysis narrative
-               - Ensure all insights are properly contextualized
-               - Validate the completeness of the analysis
+            4. THEN, use the generate_insights tool to extract insights:
+               generate_insights_tool(file_path="{dataset_path}")
             
-            5. Generate coordination report with:
-               - Analysis plan and execution strategy
-               - Task delegation details and rationale
-               - Quality assurance measures implemented
-               - Integration approach and synthesis methodology
-               - Final comprehensive analysis results
-               - Recommendations for future analysis workflows
+            5. OPTIONALLY, create visualizations to support coordination:
+               create_visualization_tool(file_path="{dataset_path}", chart_type="auto")
             
-            Return comprehensive coordination report with analysis plan, execution details, and integrated results from all agents.
+            6. FINALLY, save your coordination report:
+               save_analysis_report_tool(analysis_content="[your coordination report]", dataset_name="[dataset_name]")
+            
+            Your coordination report should include:
+            - Dataset assessment and analysis plan
+            - Task delegation strategy for specialized agents
+            - Quality assurance measures
+            - Integration approach and synthesis methodology
+            - Comprehensive analysis results
+            - Recommendations for future analysis workflows
+            - Path to saved coordination report
+            
+            Make sure to use the tools to perform actual data operations, not just describe what you would do.
             """,
             agent=self.agent,
             expected_output="Comprehensive coordination report with analysis plan, execution details, and integrated results from all agents"

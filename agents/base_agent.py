@@ -40,90 +40,14 @@ class BaseAgent:
     def _get_tools(self) -> List:
         """Get tools available to this agent. Override in subclasses."""
         try:
-            from crewai_tools import FileReadTool
-            from crewai import tool
+            # Import the real executable tools
+            from agent_tools_fixed import ALL_TOOLS
             
-            # Tool 1: Read CSV files
-            csv_tool = FileReadTool()
-            
-            # Tool 2: Analyze dataset - REAL DATA ANALYSIS
-            @tool("analyze_dataset")
-            def analyze_dataset_tool(file_path: str) -> str:
-                """Analyze a CSV file and return comprehensive real data insights."""
-                try:
-                    import pandas as pd
-                    import numpy as np
-                    
-                    df = pd.read_csv(file_path)
-                    
-                    analysis = f"""
-REAL DATA ANALYSIS REPORT:
-==========================
-
-📊 DATASET OVERVIEW:
-- File: {file_path}
-- Records: {len(df):,}
-- Columns: {len(df.columns)}
-- Column names: {', '.join(df.columns)}
-- Data types: {dict(df.dtypes.value_counts())}
-- Missing values: {df.isnull().sum().sum()}
-
-📈 NUMERIC ANALYSIS:
-"""
-                    
-                    # Add detailed statistics for numeric columns
-                    numeric_cols = df.select_dtypes(include=['number']).columns
-                    if len(numeric_cols) > 0:
-                        for col in numeric_cols:
-                            stats = df[col].describe()
-                            analysis += f"- {col}: mean={stats['mean']:.2f}, std={stats['std']:.2f}, min={stats['min']:.2f}, max={stats['max']:.2f}, median={stats['50%']:.2f}\n"
-                    
-                    # Add categorical analysis
-                    analysis += "\n📋 CATEGORICAL ANALYSIS:\n"
-                    categorical_cols = df.select_dtypes(include=['object']).columns
-                    if len(categorical_cols) > 0:
-                        for col in categorical_cols[:5]:  # Limit to first 5 categorical columns
-                            value_counts = df[col].value_counts().head(10)
-                            analysis += f"- {col} (top 10): {dict(value_counts)}\n"
-                    
-                    # Add correlation analysis
-                    if len(numeric_cols) > 1:
-                        analysis += "\n🔗 CORRELATION ANALYSIS:\n"
-                        corr_matrix = df[numeric_cols].corr()
-                        strong_corr = []
-                        for i in range(len(corr_matrix.columns)):
-                            for j in range(i+1, len(corr_matrix.columns)):
-                                corr_val = corr_matrix.iloc[i, j]
-                                if abs(corr_val) > 0.5:
-                                    strong_corr.append(f"{corr_matrix.columns[i]} ↔ {corr_matrix.columns[j]}: {corr_val:.3f}")
-                        if strong_corr:
-                            analysis += "\n".join(strong_corr[:5]) + "\n"
-                    
-                    # Add data quality insights
-                    analysis += "\n🔍 DATA QUALITY INSIGHTS:\n"
-                    analysis += f"- Completeness: {((len(df) * len(df.columns) - df.isnull().sum().sum()) / (len(df) * len(df.columns)) * 100):.1f}%\n"
-                    
-                    # Check for outliers
-                    outlier_cols = []
-                    for col in numeric_cols:
-                        Q1 = df[col].quantile(0.25)
-                        Q3 = df[col].quantile(0.75)
-                        IQR = Q3 - Q1
-                        outliers = df[(df[col] < Q1 - 1.5*IQR) | (df[col] > Q3 + 1.5*IQR)]
-                        if len(outliers) > 0:
-                            outlier_cols.append(f"{col}: {len(outliers)} outliers")
-                    
-                    if outlier_cols:
-                        analysis += f"- Outliers detected: {', '.join(outlier_cols[:3])}\n"
-                    
-                    return analysis
-                    
-                except Exception as e:
-                    return f"Error analyzing data: {str(e)}"
-            
-            return [csv_tool, analyze_dataset_tool]
+            # Return all available tools
+            return ALL_TOOLS
             
         except Exception as e:
+            print(f"Warning: Could not load agent tools: {str(e)}")
             # Fallback: return empty list if tools can't be created
             return []
     

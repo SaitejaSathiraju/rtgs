@@ -570,10 +570,10 @@ def agent_analyze(
     """Analyze dataset using CrewAI agents."""
     
     console.print(Panel.fit(
-        f"[bold blue]🤖 Agent-Based Analysis[/bold blue]\n"
+        f"[bold blue]🤖 REAL Tool-Executing Agent Analysis[/bold blue]\n"
         f"Analyzing: [green]{dataset}[/green]\n"
-        f"Using CrewAI agents: DataCleaner, DataTransformer, DataAnalyst, DataSummarizer",
-        title="🤖 Agent Analysis",
+        f"Using REAL tool-executing CrewAI agents: DataCleaner, DataTransformer, DataAnalyst, DataSummarizer",
+        title="🤖 REAL Agent Analysis",
         border_style="blue"
     ))
     
@@ -584,47 +584,75 @@ def agent_analyze(
         raise typer.Exit(1)
     
     try:
-        from agent_analyst import AgentAnalyst
-        agent_analyst = AgentAnalyst()
+        # Import and initialize our FIXED agent system
+        from agents import DataCleanerAgent, DataTransformerAgent, DataAnalystAgent, DataSummarizerAgent
+        from crewai import Crew, Process
         
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
             console=console,
         ) as progress:
-            task = progress.add_task("🤖 Running Agent Analysis...", total=None)
+            task = progress.add_task("🤖 Running REAL Tool-Executing Agent Analysis...", total=None)
             
             # Log process start
-            log_process_start("Agent Analysis Command", f"Analyzing {dataset_path.name}")
+            log_process_start("REAL Agent Analysis Command", f"Analyzing {dataset_path.name}")
             
-            # Run agent analysis
-            results = agent_analyst.analyze_dataset(str(dataset_path))
+            # Create all agents with REAL tools
+            cleaner = DataCleanerAgent()
+            transformer = DataTransformerAgent()
+            analyst = DataAnalystAgent()
+            summarizer = DataSummarizerAgent()
+            
+            # Create tasks that use REAL tools
+            cleaning_task = cleaner.create_cleaning_task(str(dataset_path))
+            transformation_task = transformer.create_transformation_task(str(dataset_path))
+            analysis_task = analyst.create_analysis_task(str(dataset_path))
+            summarization_task = summarizer.create_summarization_task(str(dataset_path))
+            
+            # Create crew with REAL tool-executing agents
+            crew = Crew(
+                agents=[
+                    cleaner.get_agent(),
+                    transformer.get_agent(),
+                    analyst.get_agent(),
+                    summarizer.get_agent()
+                ],
+                tasks=[
+                    cleaning_task,
+                    transformation_task,
+                    analysis_task,
+                    summarization_task
+                ],
+                process=Process.sequential,
+                verbose=True
+            )
+            
+            # Execute the crew with REAL tools
+            results = crew.kickoff()
             
             # Log process end
-            log_process_end("Agent Analysis Command", "Success", f"Analysis complete for {dataset_path.name}")
+            log_process_end("REAL Agent Analysis Command", "Success", f"Analysis complete for {dataset_path.name}")
             
-            progress.update(task, description="✅ Agent Analysis Complete!")
+            progress.update(task, description="✅ REAL Agent Analysis Complete!")
         
         # Display results
-        console.print("\n[bold green]✅ Agent Analysis Completed Successfully![/bold green]")
+        console.print("\n[bold green]✅ REAL Tool-Executing Agent Analysis Completed Successfully![/bold green]")
+        console.print(f"[blue]📊 Agents executed REAL tools and produced actual results![/blue]")
         
-        # Show agent results
-        if "agent_analysis" in results:
-            agent_info = results["agent_analysis"]
-            console.print(f"\n[bold blue]🤖 Agents Used: {', '.join(agent_info['agents_used'])}[/bold blue]")
-            console.print(f"[blue]Analysis Status: {agent_info['status']}[/blue]")
-            console.print(f"[blue]Timestamp: {agent_info['timestamp']}[/blue]")
+        # Show results
+        console.print(f"\n[bold blue]🤖 REAL Agent Results:[/bold blue]")
+        console.print(f"[blue]Result type: {type(results)}[/blue]")
+        console.print(f"[blue]Result length: {len(str(results))} characters[/blue]")
         
-        # Show insights
-        if "insights" in results:
-            insights = results["insights"]
-            
-            if "recommendations" in insights:
-                console.print("\n[bold yellow]🎯 Agent Recommendations:[/bold yellow]")
-                for rec in insights["recommendations"]:
-                    console.print(f"  • {rec}")
+        # Show preview of results
+        result_str = str(results)
+        if len(result_str) > 500:
+            console.print(f"[blue]Result preview: {result_str[:500]}...[/blue]")
+        else:
+            console.print(f"[blue]Result: {result_str}[/blue]")
         
-        console.print(f"\n[green]📄 Agent analysis report saved to output directory[/green]")
+        console.print(f"\n[green]📄 REAL Agent analysis completed with actual tool execution![/green]")
         
     except Exception as e:
         console.print(f"[red]Error during agent analysis: {str(e)}[/red]")
@@ -1599,7 +1627,7 @@ def ultimate():
     console.print(Panel.fit(
         "[bold blue]🚀 ULTIMATE COMMAND[/bold blue]\n"
         "Processes ALL datasets in /data directory\n"
-        "Runs Data Pipeline + Agent Analysis + Hybrid Analysis\n"
+        "Runs Data Pipeline + REAL Tool-Executing Agent Analysis + Hybrid Analysis\n"
         "Generates Terminal Charts + Executive Summaries\n"
         "Sets up Q&A bot for all datasets\n"
         "Makes everything ready for immediate analysis\n"
@@ -1648,24 +1676,55 @@ def ultimate():
                 log_error("Executive Summary Error", f"Failed for {file_path.name}: {str(e)}")
                 console.print(f"[yellow]⚠️ Skipped executive summary for {file_path.name}[/yellow]")
         
-        # Run Agent Analysis for all datasets
-        log_stage("AGENT ANALYSIS", "Running agent analysis for all datasets", "🤖")
+        # Run REAL Tool-Executing Agent Analysis for all datasets
+        log_stage("REAL AGENT ANALYSIS", "Running REAL tool-executing agent analysis for all datasets", "🤖")
         for file_path in data_files:
             try:
-                console.print(f"\n[bold blue]🤖 Running Agent Analysis for {file_path.name}[/bold blue]")
+                console.print(f"\n[bold blue]🤖 Running REAL Tool-Executing Agent Analysis for {file_path.name}[/bold blue]")
                 
-                # Import and initialize agent analyst
-                from agent_analyst import AgentAnalyst
-                agent_analyst = AgentAnalyst()
+                # Import and initialize our FIXED agent system
+                from agents import DataCleanerAgent, DataTransformerAgent, DataAnalystAgent, DataSummarizerAgent
+                from crewai import Crew, Process
                 
-                # Run agent analysis
-                agent_results = agent_analyst.analyze_dataset(str(file_path))
+                # Create all agents with REAL tools
+                cleaner = DataCleanerAgent()
+                transformer = DataTransformerAgent()
+                analyst = DataAnalystAgent()
+                summarizer = DataSummarizerAgent()
                 
-                console.print(f"[green]✅ Agent analysis completed for {file_path.name}[/green]")
+                # Create tasks that use REAL tools
+                cleaning_task = cleaner.create_cleaning_task(str(file_path))
+                transformation_task = transformer.create_transformation_task(str(file_path))
+                analysis_task = analyst.create_analysis_task(str(file_path))
+                summarization_task = summarizer.create_summarization_task(str(file_path))
+                
+                # Create crew with REAL tool-executing agents
+                crew = Crew(
+                    agents=[
+                        cleaner.get_agent(),
+                        transformer.get_agent(),
+                        analyst.get_agent(),
+                        summarizer.get_agent()
+                    ],
+                    tasks=[
+                        cleaning_task,
+                        transformation_task,
+                        analysis_task,
+                        summarization_task
+                    ],
+                    process=Process.sequential,
+                    verbose=True
+                )
+                
+                # Execute the crew with REAL tools
+                agent_results = crew.kickoff()
+                
+                console.print(f"[green]✅ REAL Agent analysis completed for {file_path.name}[/green]")
+                console.print(f"[blue]📊 Agents executed REAL tools and produced actual results![/blue]")
                 
             except Exception as e:
-                log_error("Agent Analysis Error", f"Failed for {file_path.name}: {str(e)}")
-                console.print(f"[yellow]⚠️ Skipped agent analysis for {file_path.name}[/yellow]")
+                log_error("REAL Agent Analysis Error", f"Failed for {file_path.name}: {str(e)}")
+                console.print(f"[yellow]⚠️ Skipped REAL agent analysis for {file_path.name}[/yellow]")
         
         # Show comprehensive status
         console.print(f"\n[bold green]📊 COMPREHENSIVE STATUS REPORT[/bold green]")
@@ -1690,7 +1749,7 @@ def ultimate():
         console.print(f"  • py cli_analyst.py ask \"Show me top 5 items\" --dataset \"your_dataset\"")
         
         console.print(f"\n[bold green]🎉 ULTIMATE SYSTEM READY![/bold green]")
-        console.print(f"[yellow]ALL datasets processed and ready for analysis![/yellow]")
+        console.print(f"[yellow]ALL datasets processed with REAL tool-executing agents![/yellow]")
         console.print(f"[blue]Just ask questions: py cli_analyst.py ask \"your question\"[/blue]")
         
         # Create final session summary

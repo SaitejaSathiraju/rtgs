@@ -22,50 +22,32 @@ class DataCleanerAgent(BaseAgent):
         """Create a data cleaning task."""
         return Task(
             description=f"""
-            CRITICAL: You must FIRST use the analyze_dataset tool to read and analyze the actual dataset at {dataset_path} to understand its specific structure, columns, data types, and content.
+            You are a Data Quality Specialist. Your task is to clean and standardize the dataset at {dataset_path}.
             
-            Use this command: analyze_dataset(file_path="{dataset_path}")
+            IMPORTANT: You must use the available tools to perform REAL data cleaning operations, not just generate text.
             
-            After reading the dataset, clean and standardize it based on the ACTUAL data structure (completely dynamic):
+            Follow these steps using the tools:
             
-            1. Data Quality Assessment (100% data-driven):
-               - Read the dataset and identify the specific columns: {dataset_path}
-               - Identify missing values and their patterns in the ACTUAL data
-               - Check for inconsistent formats in the ACTUAL columns (dates, numbers, text)
-               - Find duplicate records in this specific dataset
-               - Identify outliers and anomalies in the ACTUAL data
-               - Check column naming inconsistencies in this dataset
+            1. FIRST, use the read_dataset tool to understand the dataset:
+               read_dataset(file_path="{dataset_path}")
             
-            2. Apply cleaning operations (completely adaptive):
-               - Handle missing values appropriately for the specific variables found
-               - Standardize date formats if date columns exist in this dataset
-               - Convert numeric columns to proper types based on actual data
-               - Clean and standardize text data for the actual text columns
-               - Remove or flag duplicates found in this dataset
-               - Standardize column names (snake_case) for the actual columns
+            2. THEN, use the analyze_data_quality tool to identify quality issues:
+               analyze_data_quality_tool(file_path="{dataset_path}")
             
-            3. Validate data (based on actual content):
-               - If geographic data exists, validate location names
-               - If administrative codes exist, validate them
-               - If coordinates exist, validate they are within appropriate bounds
-               - Validate any other domain-specific constraints for this dataset
-               - Adapt validation to whatever data types and structures are found
+            3. NEXT, use the clean_dataset tool to actually clean the data:
+               clean_dataset_tool(file_path="{dataset_path}")
             
-            4. Generate a cleaning report with REAL DATA:
-               - Specific issues found in this dataset and actions taken
-               - Data quality metrics before/after for the actual data
-               - Recommendations specific to this dataset's data collection
-               - Use actual numbers and percentages from the data
+            4. FINALLY, verify the cleaning by analyzing the cleaned dataset again.
             
-            CRITICAL REQUIREMENTS:
-            - Use ONLY the actual data insights from the analyze_dataset tool
-            - Do NOT use placeholder text or predefined templates
-            - Do NOT make assumptions about the data structure
-            - Adapt completely to whatever dataset structure is found
-            - Provide specific cleaning recommendations with real numbers
+            Your output should include:
+            - Summary of the original dataset
+            - Data quality issues identified
+            - Cleaning operations performed
+            - Results of the cleaning process
+            - Path to the cleaned dataset file
             
-            Return the cleaned dataset file path and detailed cleaning report based on actual dataset analysis.
+            Make sure to use the tools to perform actual data operations, not just describe what you would do.
             """,
             agent=self.agent,
-            expected_output="Cleaned dataset file path and comprehensive cleaning report based on actual dataset analysis"
+            expected_output="Comprehensive cleaning report with actual cleaned dataset file path and detailed cleaning operations performed"
         )

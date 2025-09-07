@@ -23,54 +23,38 @@ class DataSummarizerAgent(BaseAgent):
         """Create a data summarization task."""
         return Task(
             description=f"""
-            CRITICAL: You must FIRST use the analyze_dataset tool to read and analyze the actual dataset at {dataset_path} to understand its specific structure, columns, data types, and content.
+            You are an Executive Summary Specialist. Your task is to create a clear, actionable summary of the analysis for the dataset at {dataset_path}.
             
-            Use this command: analyze_dataset(file_path="{dataset_path}")
+            IMPORTANT: You must use the available tools to perform REAL analysis operations, not just generate text.
             
-            After analyzing the ACTUAL dataset, create a comprehensive executive summary that is COMPLETELY DYNAMIC and based on the real data:
+            Follow these steps using the tools:
             
-            1. EXECUTIVE SUMMARY (100% data-driven):
-               - Extract ONLY the key findings from the actual dataset analysis
-               - Identify the most critical insights based on the ACTUAL data patterns
-               - Determine urgent actions based on the ACTUAL findings from the data
-               - Highlight positive developments found in the ACTUAL data
+            1. FIRST, use the read_dataset tool to understand the dataset:
+               read_dataset(file_path="{dataset_path}")
             
-            2. POLICY RECOMMENDATIONS (completely adaptive):
-               - Create specific recommendations based ONLY on the ACTUAL analysis findings
-               - Estimate impact based on the ACTUAL data insights and numbers
-               - Suggest implementation timeline based on the ACTUAL findings
-               - Define success metrics relevant to the analyzed dataset
+            2. THEN, use the analyze_statistics tool to get key findings:
+               analyze_statistics_tool(file_path="{dataset_path}")
             
-            3. DATA QUALITY ASSESSMENT (based on actual analysis):
-               - Extract the ACTUAL data quality score from the analysis
-               - Identify the specific data quality issues found in the analysis
-               - Recommend improvements based on the ACTUAL data quality findings
-               - Assess confidence level based on the actual analysis
+            3. NEXT, use the generate_insights tool to extract actionable insights:
+               generate_insights_tool(file_path="{dataset_path}")
             
-            4. IMMEDIATE ACTIONS (based on actual findings):
-               - Suggest immediate actions based on the ACTUAL findings
-               - Recommend follow-up analysis based on the ACTUAL data gaps
-               - Suggest additional data sources relevant to this dataset's domain
-               - Identify stakeholders relevant to this dataset's domain
+            4. OPTIONALLY, create visualizations to support your summary:
+               create_visualization_tool(file_path="{dataset_path}", chart_type="auto")
             
-            5. Create presentation-ready summary with REAL DATA ONLY:
-               - Use clear, non-technical language
-               - Include specific numbers and percentages from the ACTUAL analysis
-               - Highlight context specific to the analyzed dataset's domain
-               - Focus on actionable insights based on ACTUAL findings
-               - Include visual recommendations relevant to the actual data
-               - Provide concrete policy recommendations with specific numbers
+            5. FINALLY, save your executive summary:
+               save_analysis_report_tool(analysis_content="[your executive summary]", dataset_name="[dataset_name]")
             
-            CRITICAL REQUIREMENTS:
-            - Do NOT use placeholder text like "data would go here" or "general analysis"
-            - Do NOT make assumptions about the data structure
-            - Do NOT use predefined templates
-            - Use ONLY the ACTUAL data insights from the analyze_dataset tool
-            - Adapt completely to whatever dataset structure is found
-            - Provide specific, actionable recommendations with real numbers
+            Your executive summary should include:
+            - Executive overview of key findings
+            - Critical insights and patterns
+            - Policy recommendations
+            - Implementation roadmap
+            - Risk assessment
+            - Success metrics
+            - Path to saved summary report
             
-            Return a comprehensive executive summary based on the ACTUAL dataset analysis findings.
+            Make sure to use the tools to perform actual data operations, not just describe what you would do.
             """,
             agent=self.agent,
-            expected_output="Executive summary with REAL key findings, specific recommendations, and actionable insights based on actual dataset analysis"
+            expected_output="Executive summary with key findings, specific recommendations, and actionable insights based on actual dataset analysis"
         )
